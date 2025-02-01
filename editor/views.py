@@ -14,13 +14,19 @@ def run_code(request):
             # Parse incoming data
             data = json.loads(request.body)
             code = data.get('code', '')
+            language = data.get('language', '')
+            inputs = data.get('inputs', '')
+
+            mapping = {'text/x-java':'4','python':'5','text/x-csrc':'6','text/x-c++src':'7','javascript':'17'}
+            lang=mapping[language]
 
             # Compiler API configuration
             url = "https://code-compiler.p.rapidapi.com/v2"
             
             payload = {
-                "LanguageChoice": "5",  # Python
-                "Program": code  # Use the actual code from the editor
+                "LanguageChoice": lang,  # Python
+                "Program": code,  # Use the actual code from the editor
+                "Input": inputs
             }
             
             headers = {

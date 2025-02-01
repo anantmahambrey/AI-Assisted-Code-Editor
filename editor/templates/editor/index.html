@@ -24,6 +24,14 @@
             text-align: center;
             margin: 20px;
         }
+        .bloc{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+        }
+        .bloc2{
+            display:grid;
+            grid-template-rows:1fr 5fr;
+        }
         #editor {
             width: 400px;
             height: 300px;
@@ -61,7 +69,13 @@
         <option value="python">Python</option>
     </select>
 
-    <textarea id="editor"></textarea>
+    <div class="bloc">
+        <textarea id="editor"></textarea>
+        <div class="bloc2">
+            <p>Inputs</p>
+            <textarea id="inputs"></textarea>
+        </div>
+    </div>
     
     <button onclick="getCode()">Run Code</button>
     
@@ -106,6 +120,8 @@
 
         function getCode() {
             const code = editor.getValue();
+            const inps = document.getElementById("inputs").value;
+            var language = document.getElementById("modeDropdown").value;
             const csrftoken = getCookie('csrftoken');
             
             fetch('/run-code/', {
@@ -115,7 +131,9 @@
                     'X-CSRFToken': csrftoken
                 },
                 body: JSON.stringify({
-                    code: code
+                    code: code,
+                    language: language,
+                    inputs: inps
                 })
             })
             .then(response => {
