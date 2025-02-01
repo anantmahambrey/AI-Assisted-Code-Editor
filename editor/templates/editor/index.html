@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Editor</title>
+    {% csrf_token %}
+    
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.css">
+    
+    <!-- Optional Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/theme/duotone-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/theme/elegant.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/theme/icecoder.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/theme/monokai.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/theme/oceania-next.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/theme/shadowfox.min.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #editor {
+            width: 400px;
+            height: 300px;
+            border: 1px solid #ccc;
+            margin: 10px auto;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>CodeRUNner</h2>
+
+    <select id="modeDropdown2" onchange="changeMode2()">
+        <option value="" disabled selected>Choose Theme</option>
+        <option value="duotone-light">Duotone Light</option>
+        <option value="dracula">Dracula</option>
+        <option value="elegant">Elegant</option>
+        <option value="icecoder">Icecoder</option>
+        <option value="monokai">Monokai</option>
+        <option value="shadowfox">Shadowfox</option>
+        <option value="oceania-next">Oceania Next</option>
+    </select>
+
+    <select id="modeDropdown" onchange="changeMode()">
+        <option value="" disabled selected>Choose Language</option>
+        <option value="text/x-csrc">C</option>
+        <option value="text/x-c++src">C++</option>
+        <option value="text/x-java">Java</option>
+        <option value="javascript">JavaScript</option>
+        <option value="python">Python</option>
+    </select>
+
+    <textarea id="editor"></textarea>
+    
+    <button onclick="getCode()">Run Code</button>
+    
+    <div id="output"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/clike/clike.min.js"></script>
+
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+            lineNumbers: true,
+            mode: "javascript",
+            theme: "duotone-light",
+        });
+        
+        function changeMode() {
+            var selectedMode = document.getElementById("modeDropdown").value;
+            editor.setOption("mode", selectedMode);
+        }
+
+        function changeMode2() {
+            var selectedTheme = document.getElementById("modeDropdown2").value;
+            editor.setOption("theme", selectedTheme);
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function getCode() {
+            const code = editor.getValue();
+            const csrftoken = getCookie('csrftoken');
+            
+            fetch('/run-code/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({
+                    code: code
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').textContent = data.output;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+
+</body>
+</html>
