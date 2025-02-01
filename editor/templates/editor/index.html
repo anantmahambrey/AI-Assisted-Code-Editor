@@ -20,67 +20,315 @@
     
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            padding-top:1rem;
+            transition: margin-right 0.3s ease-in-out;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .main-content.sidebar-open {
+            margin-right: 320px;
+        }
+
+        .sidebar {
+        position: fixed;
+        right: -320px;
+        top: 0;
+        width: 320px;
+        height: 100vh;
+        background-color: #ffffff;
+        padding: 2rem;
+        box-sizing: border-box;
+        transition: right 0.3s ease-in-out;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        }
+
+        #sidebarTextarea {
+            width: 100%;
+            min-height: 100px;  /* Reduced from 200px */
+            max-height: 150px;  /* Reduced from 300px */
+            margin: 1rem 0;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            resize: vertical;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
             text-align: center;
-            margin: 20px;
+            font-weight: 600;
         }
-        .bloc{
-            display:grid;
-            grid-template-columns:1fr 1fr;
+
+        select {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background-color: white;
+            font-size: 1rem;
+            margin: 10px 0;
+            width: 200px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .bloc2{
-            display:grid;
-            grid-template-rows:1fr 5fr;
+
+        select:hover {
+            border-color: #4a90e2;
         }
-        #editor {
-            width: 400px;
-            height: 300px;
-            border: 1px solid #ccc;
-            margin: 10px auto;
+
+        .bloc {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 2rem;
+            margin-left: 40px;
+            margin-right: 40px;
+            margin-top:20px;
         }
+
+        .bloc2 {
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 1rem;
+        }
+
+        .toggle-btn {
+            position: fixed;
+            right: 20px;
+            top: 25px;
+            z-index: 1000;
+            padding: 12px 20px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-btn:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
         button {
-            padding: 10px 15px;
-            font-size: 16px;
-            margin-top: 10px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            margin: 10px 0;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-left:37px;
         }
+
+        button:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #output{
+            margin-top: 5px;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            min-height: 100px;
+            margin:25px;
+        }
+
+        .op{
+            margin-left:25px;
+            margin-bottom:0;
+        }
+
+        #sidebarOutput {
+        margin-top: 20px;
+        padding: 1.5rem;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        height: 50vh;  /* Set to 50% of viewport height */
+        overflow-y: auto;
+        font-size: 1rem;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    textarea {
+        width: 100%;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1rem;
+        font-size: 1rem;
+        resize: vertical;
+        min-height: 150px;
+        font-family: 'Consolas', monospace;
+        transition: border-color 0.3s ease;
+    }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        .CodeMirror {
+            height: 400px !important;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            font-size: 1rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 1rem 0;
+        }
+
+        .sideBox {
+        /* margin-top: 40px; */
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 4rem);
+        margin-right:20px
+    }
+
+        /* Add smooth scrollbar for sidebar output */
+    #sidebarOutput{
+        font-size:12px;
+    }
+    #sidebarOutput::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    #sidebarOutput::-webkit-scrollbar-track {
+        background: #f8f9fa;
+        border-radius: 4px;
+    }
+
+    #sidebarOutput::-webkit-scrollbar-thumb {
+        background-color: #4a90e2;
+        border-radius: 4px;
+        border: 2px solid #f8f9fa;
+    }
+
+        /* Add some spacing between dropdowns */
+        .language-selectors {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+        .header2{
+            margin:10px;
+        }
+        #modeDropdown3 {
+        padding: 8px;
+        margin-bottom: 0.5rem;
+        width:145px;
+    }
+    .sidebar button {
+        padding: 8px 16px;
+        margin: 8px 0;
+    }
     </style>
 </head>
 <body>
+    <button class="toggle-btn" onclick="toggleSidebar()">Ask AI 💡</button>
 
-    <h2>CodeRUNner</h2>
+    <div class="container">
+        <div class="main-content" id="mainContent">
+            <h2 class="header2">Code-Bender</h2>
 
-    <select id="modeDropdown2" onchange="changeMode2()">
-        <option value="" disabled selected>Choose Theme</option>
-        <option value="duotone-light">Duotone Light</option>
-        <option value="dracula">Dracula</option>
-        <option value="elegant">Elegant</option>
-        <option value="icecoder">Icecoder</option>
-        <option value="monokai">Monokai</option>
-        <option value="shadowfox">Shadowfox</option>
-        <option value="oceania-next">Oceania Next</option>
-    </select>
+            <div class="language-selectors">
+                <select id="modeDropdown2" onchange="changeMode2()">
+                    <option value="" disabled selected>Choose Theme</option>
+                    <option value="duotone-light">Duotone Light</option>
+                    <option value="dracula">Dracula</option>
+                    <option value="elegant">Elegant</option>
+                    <option value="icecoder">Icecoder</option>
+                    <option value="monokai">Monokai</option>
+                    <option value="shadowfox">Shadowfox</option>
+                    <option value="oceania-next">Oceania Next</option>
+                </select>
 
-    <select id="modeDropdown" onchange="changeMode()">
-        <option value="" disabled selected>Choose Language</option>
-        <option value="text/x-csrc">C</option>
-        <option value="text/x-c++src">C++</option>
-        <option value="text/x-java">Java</option>
-        <option value="javascript">JavaScript</option>
-        <option value="python">Python</option>
-    </select>
+                <select id="modeDropdown" onchange="changeMode()">
+                    <option value="" disabled selected>Choose Language</option>
+                    <option value="text/x-csrc">C</option>
+                    <option value="text/x-c++src">C++</option>
+                    <option value="text/x-java">Java</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                </select>
+            </div>
 
-    <div class="bloc">
-        <textarea id="editor"></textarea>
-        <div class="bloc2">
-            <p>Inputs</p>
-            <textarea id="inputs"></textarea>
+            <div class="bloc">
+                <textarea id="editor"></textarea>
+                <div class="bloc2">
+                    <p>Inputs</p>
+                    <textarea id="inputs" placeholder="Enter your program inputs here..."></textarea>
+                </div>
+            </div>
+            
+            <button onclick="getCode()">Run Code</button>
+            
+            <p class="op">Output</p>
+            <pre><div id="output"></div></pre>
+        </div>
+
+        <div class="sidebar" id="sidebar">
+            <div class="sideBox">
+                <select id="modeDropdown3">
+                    <option value="" disabled selected>Use AI For</option>
+                    <option value="a">Code Generation</option>
+                    <option value="b">Code Debugging</option>
+                    <option value="c">General Query</option>
+                </select>
+                <textarea id="sidebarTextarea" placeholder="What would you like help with?"></textarea>
+                <button onclick="submitSidebarText()">Generate ✨</button>
+                <pre><div id="sidebarOutput"></div></pre>
+            </div>
         </div>
     </div>
-    
-    <button onclick="getCode()">Run Code</button>
-    
-    <div id="output"></div>
 
+    <!-- Scripts remain exactly the same -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/javascript/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/python/python.min.js"></script>
@@ -116,6 +364,44 @@
                 }
             }
             return cookieValue;
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            sidebar.classList.toggle('open');
+            mainContent.classList.toggle('sidebar-open');
+        }
+
+        function submitSidebarText() {
+            const text = document.getElementById('sidebarTextarea').value;
+            const csrftoken = getCookie('csrftoken');
+            var purpose = document.getElementById("modeDropdown3").value;
+            
+            fetch('/process-sidebar/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({
+                    text: text,
+                    purpose: purpose
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('sidebarOutput').textContent = data.output;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('sidebarOutput').textContent = 'Error: ' + error.message;
+            });
         }
 
         function getCode() {
