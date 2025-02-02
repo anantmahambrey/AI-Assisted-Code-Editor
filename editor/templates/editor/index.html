@@ -19,13 +19,37 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/theme/shadowfox.min.css">
     
     <style>
+        :root {
+            /* Light theme variables */
+            --primary-color: #2563eb;
+            --secondary-color: #3b82f6;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --header-bg: white;
+            --card-bg: white;
+            --input-bg: white;
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme variables */
+            --primary-color: #60a5fa;
+            --secondary-color: #3b82f6;
+            --background-color: #1a1b1e;
+            --text-color: #e2e8f0;
+            --border-color: #2d2d2d;
+            --header-bg: #111111;
+            --card-bg: #1e1e1e;
+            --input-bg: #2d2d2d;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-            background-color: #f8f9fa;
-            color: #2c3e50;
+            background-color: var(--background-color);
+            color: var(--text-color);
         }
 
         .container {
@@ -52,7 +76,7 @@
         top: 0;
         width: 320px;
         height: 100vh;
-        background-color: #ffffff;
+        background-color:var(--background-color);
         padding: 2rem;
         box-sizing: border-box;
         transition: right 0.3s ease-in-out;
@@ -68,9 +92,9 @@
             max-height: 150px;  /* Reduced from 300px */
             margin: 1rem 0;
             padding: 1rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border-color);
             border-radius: 8px;
-            font-size: 0.95rem;
+            font-size: 13px;
             resize: vertical;
         }
 
@@ -79,7 +103,7 @@
         }
 
         h2 {
-            color: #2c3e50;
+            color: var(--background-color);
             font-size: 2.5rem;
             margin-bottom: 2rem;
             text-align: center;
@@ -88,9 +112,10 @@
 
         select {
             padding: 12px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border-color);
             border-radius: 8px;
-            background-color: white;
+            background-color: var(--background-color);
+            color:var(--text-color);
             font-size: 1rem;
             margin: 10px 0;
             width: 200px;
@@ -163,12 +188,17 @@
         #output{
             margin-top: 5px;
             padding: 1.5rem;
-            background: white;
-            border: 1px solid #e2e8f0;
+            background: var(--background-color);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             min-height: 100px;
             margin:25px;
+        }
+        .theme-toggle{
+            background-color: var(--background-color);
+            color:var(--text-color);
+            border-color:var(--border-color);
         }
 
         .op{
@@ -179,8 +209,8 @@
         #sidebarOutput {
         margin-top: 20px;
         padding: 1.5rem;
-        background: white;
-        border: 1px solid #e2e8f0;
+        background: var(--background-color);
+        border: 1px solid var(--border-color);
         border-radius: 12px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         height: 50vh;  /* Set to 50% of viewport height */
@@ -193,7 +223,7 @@
 
     textarea {
         width: 100%;
-        border: 2px solid #e2e8f0;
+        border: 2px solid var(--border-color);
         border-radius: 8px;
         padding: 1rem;
         font-size: 1rem;
@@ -201,24 +231,26 @@
         min-height: 150px;
         font-family: 'Consolas', monospace;
         transition: border-color 0.3s ease;
+        background-color: var(--input-bg);
+        color:var(--text-color);
     }
 
         textarea:focus {
             outline: none;
-            border-color: #4a90e2;
+            border-color: var(--border-color);
         }
 
         .CodeMirror {
             height: 400px !important;
             border-radius: 8px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border-color);
             font-size: 1rem;
         }
 
         p {
             font-size: 1.1rem;
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--text-color);
             margin: 1rem 0;
         }
 
@@ -239,14 +271,14 @@
     }
 
     #sidebarOutput::-webkit-scrollbar-track {
-        background: #f8f9fa;
+        background: var(--background-color);
         border-radius: 4px;
     }
 
     #sidebarOutput::-webkit-scrollbar-thumb {
-        background-color: #4a90e2;
+        background-color:var(--background-color);
         border-radius: 4px;
-        border: 2px solid #f8f9fa;
+        border: 2px solid var(--border-color);
     }
 
         /* Add some spacing between dropdowns */
@@ -258,15 +290,27 @@
         }
         .header2{
             margin:10px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
         }
         #modeDropdown3 {
         padding: 8px;
         margin-bottom: 0.5rem;
         width:145px;
+        font-size:12px;
     }
     .sidebar button {
         padding: 8px 16px;
         margin: 8px 0;
+    }
+    .subBut{
+        width:100%;
+    }
+    .heading{
+        display:grid;
+        grid-template-columns:3fr 7fr 4fr;
+        margin-right:130px;
     }
     </style>
 </head>
@@ -275,8 +319,21 @@
 
     <div class="container">
         <div class="main-content" id="mainContent">
-            <h2 class="header2">Code-Bender</h2>
-
+            <div class="heading">
+                <h2 class="header2">Code-Bender</h2>
+                <div></div>
+                <div>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                <svg id="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <!-- Sun icon path -->
+                    <path class="sun-icon" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    <!-- Moon icon path -->
+                    <path class="moon-icon" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" style="display:none;"/>
+                </svg>
+                <span id="theme-text">Toggle Theme</span>
+                </button>
+            </div>
+            </div>
             <div class="language-selectors">
                 <select id="modeDropdown2" onchange="changeMode2()">
                     <option value="" disabled selected>Choose Theme</option>
@@ -287,6 +344,15 @@
                     <option value="monokai">Monokai</option>
                     <option value="shadowfox">Shadowfox</option>
                     <option value="oceania-next">Oceania Next</option>
+                </select>
+
+                <select id="font-size" onchange="changeMode3()">
+                    <option value="" disabled selected>Choose Font Size</option>
+                    <option value="12px">12px</option>
+                    <option value="14px">14px</option>
+                    <option value="16px">16px (default)</option>
+                    <option value="18px">18px</option>
+                    <option value="20px">20px</option>
                 </select>
 
                 <select id="modeDropdown" onchange="changeMode()">
@@ -319,10 +385,11 @@
                     <option value="" disabled selected>Use AI For</option>
                     <option value="a">Code Generation</option>
                     <option value="b">Code Debugging</option>
+                    <option value="d">Error Identification</option>
                     <option value="c">General Query</option>
                 </select>
                 <textarea id="sidebarTextarea" placeholder="What would you like help with?"></textarea>
-                <button onclick="submitSidebarText()">Generate ✨</button>
+                <button class="subBut" onclick="submitSidebarText()">Generate ✨</button>
                 <pre><div id="sidebarOutput"></div></pre>
             </div>
         </div>
@@ -338,18 +405,58 @@
         var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
             lineNumbers: true,
             mode: "javascript",
-            theme: "duotone-light",
+            theme: "dracula",
+            foldGutter: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+            autoCloseBrackets: true,
+            matchBrackets: true,
+            indentUnit: 4,
+            tabSize: 4,
+            indentWithTabs: true,
+            lineWrapping: true,
+            autofocus: true
         });
-        
+
+        const codeTemplates = {
+            'text/x-csrc': `#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}`,
+            'text/x-c++src': `#include <iostream>\n\nint main() {\n    std::cout << "Hello, World!" << std::endl;\n    return 0;\n}`,
+            'text/x-java': `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`,
+            'javascript': `function main() {\n    console.log("Hello, World!");\n}\n\nmain();`,
+            'python': `def main():\n    print("Hello, World!")\n\nif __name__ == "__main__":\n    main()`
+        };
+
         function changeMode() {
-            var selectedMode = document.getElementById("modeDropdown").value;
+            const selectedMode = document.getElementById("modeDropdown").value;
             editor.setOption("mode", selectedMode);
+            editor.setValue(codeTemplates[selectedMode] || '');
         }
 
         function changeMode2() {
             var selectedTheme = document.getElementById("modeDropdown2").value;
             editor.setOption("theme", selectedTheme);
         }
+
+        document.getElementById("font-size").addEventListener("change", function() {
+            var fontSize = this.value;
+            editor.getWrapperElement().style.fontSize = fontSize;
+        });
+
+        document.getElementById("modeDropdown3").addEventListener("change", function() {
+            var selectedMode = this.value;
+            var textarea = document.getElementById("sidebarTextarea");
+
+            // Define placeholders based on selected mode
+            var placeholders = {
+                "a": "Please enter the topic and the language for the code to be generated.",
+                "b": "Please copy-paste or enter the code to be debugged here.",
+                "c": "What would you like help with?",
+                "d": "Please copy-paste or enter the error here.",
+            };
+
+            // Update placeholder or reset if no selection
+            textarea.placeholder = placeholders[selectedMode] || "What would you like help with?";
+        });
+
 
         function getCookie(name) {
             let cookieValue = null;
@@ -442,6 +549,52 @@
                 document.getElementById('output').textContent = 'Error: ' + error.message;
             });
         }
+
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            const sunPath = themeIcon.querySelector('.sun-icon');
+            const moonPath = themeIcon.querySelector('.moon-icon');
+            
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.setAttribute('data-theme', 'light');
+                sunPath.style.display = 'block';
+                moonPath.style.display = 'none';
+                themeText.textContent = 'Dark Mode';
+                
+                // Change editor theme if it's using a dark theme
+                if (isDarkTheme(editor.getOption('theme'))) {
+                    editor.setOption('theme', 'duotone-light');
+                }
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                sunPath.style.display = 'none';
+                moonPath.style.display = 'block';
+                themeText.textContent = 'Light Mode';
+                
+                // Change editor theme if it's using a light theme
+                if (!isDarkTheme(editor.getOption('theme'))) {
+                    editor.setOption('theme', 'dracula');
+                }
+            }
+        }
+
+        // Helper function to determine if a CodeMirror theme is dark
+        function isDarkTheme(theme) {
+            const darkThemes = ['dracula', 'monokai', 'shadowfox', 'oceanic-next'];
+            return darkThemes.includes(theme);
+        }
+
+        // Initialize theme
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDark) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                editor.setOption('theme', 'dracula');
+            }
+        });
     </script>
 
 </body>

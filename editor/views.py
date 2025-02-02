@@ -97,6 +97,8 @@ def process_sidebar(request):
                 prompt='Generate a code snippet for the following. Do not include any other text, or letters or punctuations. Just give one code. Thats it.'
             elif purpose=='b':
                 prompt='Debug the following code. Briefly explain what is wrong and what can be corrected.'
+            elif purpose=='d':
+                prompt='Please briefly tell me what the following error means.'
             else:
                 prompt='Please answer the following query briefly.'
             
