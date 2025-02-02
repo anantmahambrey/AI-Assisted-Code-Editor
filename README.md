@@ -43,7 +43,7 @@ It provides users with an easy-to-use interface to code in several languages, wi
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/anantmahambrey/AI-Assisted-Code-Editor
+git clone https://github.com/anantmahambrey/AI-Assisted-Code-Editor.git
 cd code_editor
 ```
 
