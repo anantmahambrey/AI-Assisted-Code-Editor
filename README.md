@@ -2,6 +2,7 @@
 
 ## More Details 💡
 Check out our detailed Presentation : [Presentation](https://drive.google.com/file/d/1vtDEphdAHL-2LyE-nXCtpTuN6InXlGr5/view?usp=drive_link)
+
 Check out our demo video : [Demo Video](https://drive.google.com/file/d/1rACCbPIBPFf7KP9vWTNvUrIfvA2gGLJf/view?usp=drive_link)
 
 ## Overview ✨
@@ -84,6 +85,11 @@ python manage.py runserver
 2. Enter your doubt/problem
 3. Click "Generate" to process the text
 4. View results in the scrollable output area
+
+### Future Scope
+1. User profiles and authentication
+2. Real time collaboration for users
+3. More AI Features
 
 ## Acknowledgments 😀
 - CodeMirror for the text editor
