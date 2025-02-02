@@ -1,7 +1,7 @@
 # Code-Bender : AI-Assisted Online Code Editor
 
 ## Overview ✨
-CodeRUNner is a web-based code editor built with Django and CodeMirror that allows users to write, edit, and execute code in various programming languages. 
+Code-Bender is a web-based code editor built with Django and CodeMirror that allows users to write, edit, and execute code in various programming languages. 
 It provides users with an easy-to-use interface to code in several languages, with AI Assistance.
 
 ## Features ⚙️
