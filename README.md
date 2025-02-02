@@ -79,25 +79,6 @@ python manage.py runserver
 3. Click "Generate" to process the text
 4. View results in the scrollable output area
 
-## Troubleshooting
-
-### Common Issues
-1. **API Connection Failed**
-   - Check your internet connection
-   - Verify API key is correct
-   - Ensure RapidAPI subscription is active
-
-2. **Code Execution Errors**
-   - Check console for error messages
-   - Verify code syntax
-   - Check language selection
-
-3. **Sidebar Issues**
-   - Clear browser cache
-   - Check for JavaScript console errors
-   - Verify CSRF token is present
-  
-
 ## Acknowledgments 😀
 - CodeMirror for the text editor
 - Google Gemini API for the AI Assistance
