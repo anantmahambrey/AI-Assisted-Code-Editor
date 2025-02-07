@@ -39,7 +39,7 @@
             --text-color: #e2e8f0;
             --border-color: #2d2d2d;
             --header-bg: #111111;
-            --card-bg: #1e1e1e;
+            --card-bg: hwb(0 12% 88%);
             --input-bg: #2d2d2d;
         }
 
@@ -209,16 +209,18 @@
         #sidebarOutput {
         margin-top: 20px;
         padding: 1.5rem;
-        background: var(--background-color);
+        background: var(--card-bg);
         border: 1px solid var(--border-color);
         border-radius: 12px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         height: 50vh;  /* Set to 50% of viewport height */
+        width:90%;
         overflow-y: auto;
-        font-size: 1rem;
+        font-size: 13px;
         line-height: 1.5;
         white-space: pre-wrap;
         word-wrap: break-word;
+        color:var(--text-color);
     }
 
     textarea {
@@ -307,6 +309,12 @@
     .subBut{
         width:100%;
     }
+    .sub{
+        display:grid;
+        grid-template-rows:10fr 1fr;
+        height:200px;
+        place-items:center;
+    }
     .heading{
         display:grid;
         grid-template-columns:3fr 7fr 4fr;
@@ -388,8 +396,10 @@
                     <option value="d">Error Identification</option>
                     <option value="c">General Query</option>
                 </select>
+                <div class="sub">
                 <textarea id="sidebarTextarea" placeholder="What would you like help with?"></textarea>
                 <button class="subBut" onclick="submitSidebarText()">Generate ✨</button>
+                </div>
                 <pre><div id="sidebarOutput"></div></pre>
             </div>
         </div>
