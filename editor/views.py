@@ -4,12 +4,27 @@ from django.views.decorators.csrf import csrf_protect
 import json
 import requests
 import google.generativeai as genai
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
 
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'auth/register.html', {'form': form})
+
+@login_required
 def index(request):
     return render(request, 'editor/index.html')
 
 #On run code button
 @csrf_protect
+@login_required
 def run_code(request):
     if request.method == 'POST':
         try:
@@ -71,6 +86,7 @@ def run_code(request):
 
 #On ask AI (submit) button
 @csrf_protect
+@login_required
 def process_sidebar(request):
     if request.method == 'POST':
         try:

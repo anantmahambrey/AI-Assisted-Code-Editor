@@ -116,9 +116,10 @@
             border-radius: 8px;
             background-color: var(--background-color);
             color:var(--text-color);
-            font-size: 1rem;
+            font-size: 0.8rem;
             margin: 10px 0;
-            width: 200px;
+            width: 160px;
+            /* height:10px; */
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -228,7 +229,7 @@
         border: 2px solid var(--border-color);
         border-radius: 8px;
         padding: 1rem;
-        font-size: 1rem;
+        font-size: 0.9rem;
         resize: vertical;
         min-height: 150px;
         font-family: 'Consolas', monospace;
@@ -320,6 +321,12 @@
         grid-template-columns:3fr 7fr 4fr;
         margin-right:130px;
     }
+    .logout{
+        background-color: #dc3545;
+    }
+    .logout:hover{
+        background-color: #83252e;
+    }
     </style>
 </head>
 <body>
@@ -404,6 +411,10 @@
             </div>
         </div>
     </div>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="logout">Logout</button>
+    </form>
 
     <!-- Scripts remain exactly the same -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.js"></script>
