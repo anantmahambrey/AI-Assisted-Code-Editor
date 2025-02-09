@@ -72,10 +72,26 @@
     a:hover {
       text-decoration: underline;
     }
+
+    .header2 {
+            color: rgb(46, 46, 106);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .divi{
+          display:grid;
+          grid-template-rows:1fr 3fr;
+          place-items:center;
+        }
   </style>
 </head>
 <body>
   <!-- Login Form -->
+   <div class="divi">
+  <p class="header2"><b>Code-Bender</b></p>
   <form method="post">
     {% csrf_token %}
     <div class="form-group">
@@ -85,5 +101,6 @@
     </div>
     <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
   </form>
+</div>
 </body>
 </html>

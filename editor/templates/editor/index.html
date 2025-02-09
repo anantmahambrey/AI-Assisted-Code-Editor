@@ -106,7 +106,7 @@
             color: var(--background-color);
             font-size: 2.5rem;
             margin-bottom: 2rem;
-            text-align: center;
+            /* text-align: center; */
             font-weight: 600;
         }
 
@@ -205,6 +205,10 @@
         .op{
             margin-left:25px;
             margin-bottom:0;
+        }
+
+        .user{
+            color:var(--text-color);
         }
 
         #sidebarOutput {
@@ -327,6 +331,12 @@
     .logout:hover{
         background-color: #83252e;
     }
+    .temp{
+        grid-template-rows:2fr 1fr;
+        height:50px;
+        width:320px;
+        place-items:left;
+    }
     </style>
 </head>
 <body>
@@ -335,18 +345,20 @@
     <div class="container">
         <div class="main-content" id="mainContent">
             <div class="heading">
-                <h2 class="header2">Code-Bender</h2>
-                <div></div>
-                <div>
+                <div class="temp">
+                    <h2 class="header2">Code-Bender</h2>
+                    <p class="user">🙋🏻‍♂️ <b><u>{{username}}</u></b></p>
+                </div>
+            <div>
                 <button class="theme-toggle" onclick="toggleTheme()">
-                <svg id="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <!-- Sun icon path -->
-                    <path class="sun-icon" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    <!-- Moon icon path -->
-                    <path class="moon-icon" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" style="display:none;"/>
-                </svg>
-                <span id="theme-text">Toggle Theme</span>
-                </button>
+                    <svg id="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <!-- Sun icon path -->
+                        <path class="sun-icon" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        <!-- Moon icon path -->
+                        <path class="moon-icon" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" style="display:none;"/>
+                    </svg>
+                    <span id="theme-text">Toggle Theme</span>
+                    </button>
             </div>
             </div>
             <div class="language-selectors">
@@ -581,8 +593,8 @@
             
             if (html.getAttribute('data-theme') === 'dark') {
                 html.setAttribute('data-theme', 'light');
-                sunPath.style.display = 'block';
-                moonPath.style.display = 'none';
+                sunPath.style.display = 'none';
+                moonPath.style.display = 'block';
                 themeText.textContent = 'Dark Mode';
                 
                 // Change editor theme if it's using a dark theme
@@ -591,8 +603,8 @@
                 }
             } else {
                 html.setAttribute('data-theme', 'dark');
-                sunPath.style.display = 'none';
-                moonPath.style.display = 'block';
+                sunPath.style.display = 'block';
+                moonPath.style.display = 'none';
                 themeText.textContent = 'Light Mode';
                 
                 // Change editor theme if it's using a light theme

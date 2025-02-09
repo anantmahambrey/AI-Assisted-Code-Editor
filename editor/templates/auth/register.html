@@ -121,8 +121,23 @@
     <p class="instr">Enter the same password as before, for verification.</p>
     </div>
 
-    <button type="submit" class="btn btn-primary">Register</button>
+    <button type="submit" class="btn btn-primary" onclick="checkfn()">Register</button>
+    <p style="text-align:left"><a href="{% url 'login' %}">⬅️Login</a></p>
 </form>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+        document.querySelector("form").addEventListener("submit", function(event) {
+            var password1 = document.getElementById("id_password1").value;
+            var password2 = document.getElementById("id_password2").value;
+
+            if (password1 !== password2) {
+                alert("Passwords do not match!");
+                event.preventDefault(); 
+                return;
+            }
+        });
+    });
+</script>
 </body>
 </html>

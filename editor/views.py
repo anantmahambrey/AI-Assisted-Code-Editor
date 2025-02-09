@@ -20,7 +20,7 @@ def register(request):
 
 @login_required
 def index(request):
-    return render(request, 'editor/index.html')
+    return render(request, 'editor/index.html',{'username': request.user.username})
 
 #On run code button
 @csrf_protect
