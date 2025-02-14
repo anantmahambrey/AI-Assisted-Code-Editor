@@ -8,5 +8,8 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', views.register, name='register'),
     path('run-code/', views.run_code, name='run_code'),
+    path('save-code/', views.save_code, name='save_code'),
     path('process-sidebar/', views.process_sidebar, name='process_sidebar'),
+    path('user/', views.user, name='user'),
+    path('get-saved-codes/', views.get_saved_codes, name='get_saved_codes'),
 ]

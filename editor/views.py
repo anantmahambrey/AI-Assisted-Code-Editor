@@ -7,6 +7,7 @@ import google.generativeai as genai
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
+from .models import CodeSnippet
 
 def register(request):
     if request.method == 'POST':
@@ -21,6 +22,10 @@ def register(request):
 @login_required
 def index(request):
     return render(request, 'editor/index.html',{'username': request.user.username})
+
+@login_required
+def user(request):
+    return render(request, 'editor/user.html',{'username': request.user.username})
 
 #On run code button
 @csrf_protect
@@ -129,3 +134,42 @@ def process_sidebar(request):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+@login_required
+def get_saved_codes(request):
+    codes = CodeSnippet.objects.filter(user=request.user)
+    return JsonResponse({
+        'codes': list(codes.values('id', 'title', 'code', 'language'))
+    })
+
+@login_required
+def save_code(request):
+    if request.method == 'POST':
+        try:
+            # Parse incoming data
+            data = json.loads(request.body)
+            code = data.get('code', '')
+            language = data.get('language', '')
+            title = data.get('title', '')
+
+            # Ensure data is not empty
+            if not code.strip():
+                return JsonResponse({'error': 'Code cannot be empty'}, status=400)
+
+            # Save to database
+            CodeSnippet.objects.create(
+                user=request.user,
+                code=code,
+                language=language,
+                title=title,
+            )
+
+            return JsonResponse({'message': 'Code saved successfully'}, status=201)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)

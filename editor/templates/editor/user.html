@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<head>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #f5f7fa;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        p {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        h3 {
+            color: #1e293b;
+            font-size: 1.75rem;
+            margin: 1.5rem 0;
+            font-weight: 600;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            margin: 10px 0;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-left: 37px;
+        }
+
+        button:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .saved-code {
+            padding: 1.5rem;
+            margin: 1rem 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .saved-code:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .saved-code h4 {
+            color: #2563eb;
+            margin: 0 0 0.5rem 0;
+            font-size: 1.25rem;
+        }
+
+        .saved-code p {
+            color: #64748b;
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .saved-code pre {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #e2e8f0;
+            margin: 0.5rem 0;
+        }
+
+        #savedCodes {
+            overflow-y: auto;
+            max-height: 600px;
+            padding-right: 1rem;
+        }
+
+        #savedCodes::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #savedCodes::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        #savedCodes::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        #savedCodes::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, #b9d2f9 0%, #83aafc 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display:grid;
+            grid-template-columns:1fr 10fr;
+            place-items:right;
+        }
+
+        .welcome-banner p {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .back:hover{
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-banner">
+        <p><a href="{% url 'index' %}" class="back">⬅️</a></p>
+        <p>Welcome {{username}}!</p>
+    </div>
+    <h3>Saved Codes</h3>
+    <div id="savedCodes"></div>
+
+    <script>
+        function loadSavedCodes() {
+            const csrftoken = getCookie('csrftoken');
+            
+            fetch('/get-saved-codes/', {
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const savedCodesDiv = document.getElementById('savedCodes');
+                savedCodesDiv.innerHTML = data.codes.map(code => `
+                    <div class="saved-code">
+                        <h4>${code.title}</h4>
+                        <p>Language: ${code.language}</p>
+                        <pre><p>${code.code}</p></pre>
+                    </div>
+                `).join('');
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        document.addEventListener('DOMContentLoaded', loadSavedCodes);
+    </script>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<head>
+<style>
+    button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            margin: 10px 0;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-left:37px;
+        }
+
+        button:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+    .saved-code {
+    padding: 10px;
+    margin: 10px 0;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.saved-code button {
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+#savedCodes {
+    overflow-y: auto;
+    max-height: 400px;
+}
+</style>
+</head>
+<body>
+    <p>Welcome {{username}}!</p>
+    <h3>Saved Codes</h3>
+    <div id="savedCodes"></div>
+
+    <script>
+        // Add this to your existing JavaScript
+function loadSavedCodes() {
+    const csrftoken = getCookie('csrftoken');
+    
+    fetch('/get-saved-codes/', {
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const savedCodesDiv = document.getElementById('savedCodes');
+        savedCodesDiv.innerHTML = data.codes.map(code => `
+            <div class="saved-code">
+                <h4>${code.title}</h4>
+                <p>Language: ${code.language}</p>
+                <pre><p>Code: ${code.code}</p></pre>
+            </div>
+        `).join('');
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
+    document.addEventListener('DOMContentLoaded', loadSavedCodes);
+    </script>
+</body> -->
