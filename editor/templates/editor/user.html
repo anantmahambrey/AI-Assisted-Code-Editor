@@ -106,7 +106,7 @@
         }
 
         .welcome-banner {
-            background: linear-gradient(135deg, #b9d2f9 0%, #83aafc 100%);
+            background: linear-gradient(135deg, #b9d2f9 0%, #6b99fb 100%);
             color: white;
             padding: 2rem;
             border-radius: 12px;
@@ -116,6 +116,26 @@
             grid-template-columns:1fr 10fr;
             place-items:right;
         }
+            .back-button {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 15px;
+        background-color: #4a90e2;
+        color: white;
+        text-decoration: none;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .back-button:hover {
+        background-color: #3a7bc8;
+        transform: translateX(-3px);
+    }
+
+    .back-icon {
+        margin-right: 5px;
+        font-size: 16px;
+    }
 
         .welcome-banner p {
             font-size: 1.5rem;
@@ -125,14 +145,20 @@
         .back:hover{
             cursor:pointer;
         }
+        .welcome{
+            text-align:center;
+        }
     </style>
 </head>
 <body>
     <div class="welcome-banner">
-        <p><a href="{% url 'index' %}" class="back">⬅️</a></p>
-        <p>Welcome {{username}}!</p>
+        <a href="{% url 'index' %}" class="back-button">
+            <span class="back-icon">←</span>
+            <span class="back-text">Back</span>
+        </a>
+        <p class="welcome">Welcome {{username}}!</p>
     </div>
-    <h3>Saved Codes</h3>
+    <h3>Your Codes</h3>
     <div id="savedCodes"></div>
 
     <script>
@@ -147,12 +173,21 @@
             })
             .then(response => response.json())
             .then(data => {
+                const mapping = {
+                'text/x-java': 'Java',
+                'python': 'Python',
+                'text/x-csrc': 'C',
+                'text/x-c++src': 'C++',
+                'javascript': 'JavaScript'
+                };
                 const savedCodesDiv = document.getElementById('savedCodes');
                 savedCodesDiv.innerHTML = data.codes.map(code => `
                     <div class="saved-code">
                         <h4>${code.title}</h4>
-                        <p>Language: ${code.language}</p>
+                        <p>Language: ${mapping[code.language] || code.language}</p>
+                        <p>Created on : ${code.created_at.substring(0, 10)}</p>
                         <pre><p>${code.code}</p></pre>
+                        <button class="delete-btn" onclick="deleteCode(${code.id},'${code.title}')">Delete</button>
                     </div>
                 `).join('');
             })
@@ -172,6 +207,38 @@
                 }
             }
             return cookieValue;
+        }
+
+        function deleteCode(codeId,codeTitle) {
+            // Confirm deletion with the user
+            if (confirm(`Are you sure you want to delete "${codeTitle}"?`)) {
+                const csrftoken = getCookie('csrftoken');
+                
+                fetch('/delete-code/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        id:codeId
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Remove the deleted code div from the DOM
+                        alert("Code deleted successfully!");
+                        location.reload();
+                    } else {
+                        alert("Error deleting code. Please try again.");
+                    }
+                    return response.json();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while deleting the code.");
+                });
+            }
         }
 
         document.addEventListener('DOMContentLoaded', loadSavedCodes);

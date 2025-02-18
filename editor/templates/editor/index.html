@@ -347,15 +347,40 @@
         width:320px;
         place-items:left;
     }
-    #codeTitle{
-        margin-left:10px;
-        height:30px;
-        width:300px;
-        margin-right:10px;
-        border-radius:10px;
-        background-color:var(--background-color);
-        color:var(--text-color);
-        border-color: var(--border-color);
+    #codeTitle {
+    height: 40px;
+    width: 95%;
+    margin: 10px auto;
+    padding: 0 15px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: 16px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    outline: none;
+    }
+
+    /* Focus state styling */
+    #codeTitle:focus {
+        border-color: var(--accent-color, #4a90e2);
+        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25);
+    }
+
+    /* Placeholder styling */
+    #codeTitle::placeholder {
+        color: var(--placeholder-color, #aaa);
+        opacity: 0.8;
+    }
+
+    /* Hover state */
+    #codeTitle:hover {
+        border-color: var(--hover-border-color, #999);
+    }
+    .textdiv{
+        display:grid;
+        grid-template-rows:1fr 6fr;
     }
     </style>
 </head>
@@ -413,7 +438,10 @@
             </div>
 
             <div class="bloc">
+                <div class="textdiv">
+                <input type="text" id="codeTitle" placeholder="Program Title">
                 <textarea id="editor"></textarea>
+                </div>
                 <div class="bloc2">
                     <p>Inputs</p>
                     <textarea id="inputs" placeholder="Enter your program inputs here..."></textarea>
@@ -424,8 +452,9 @@
 
             <div>
                 <button onclick="getCode()">Run Code</button>
-                <input type="text" id="codeTitle" placeholder="Enter title to save">
+                <!-- <div> -->
                 <button onclick="saveCode()">Save Code</button>
+                <!-- </div> -->
             </div>
             
             <p class="op">Output</p>
@@ -648,8 +677,15 @@
 
         function saveCode() {
             const code = editor.getValue();
-            const title = document.getElementById('codeTitle').value || 'Untitled';
+            const title = document.getElementById('codeTitle').value.trim();
             const language = document.getElementById('modeDropdown').value;
+            
+            // Check if both code and title are provided
+            if (!code || !title) {
+                alert("Please enter both code and title before saving.");
+                return; // Exit the function early
+            }
+            
             const csrftoken = getCookie('csrftoken');
             
             fetch('/save-code/', {
@@ -661,11 +697,21 @@
                 body: JSON.stringify({
                     code: code,
                     title: title,
-                    language: language
+                    language: language,
                 })
             })
-            // .then(response => response.json())
-            // .catch(error => console.error('Error:', error));
+            .then(response => {
+                if (response.ok) {
+                    alert("Code Saved Successfully!");
+                } else {
+                    alert("Error saving code. Please try again.");
+                }
+                return response.json();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while saving the code.");
+            });
         }
     </script>
 

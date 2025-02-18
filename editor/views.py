@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_exempt
 import json
 import requests
 import google.generativeai as genai
@@ -139,7 +140,7 @@ def process_sidebar(request):
 def get_saved_codes(request):
     codes = CodeSnippet.objects.filter(user=request.user)
     return JsonResponse({
-        'codes': list(codes.values('id', 'title', 'code', 'language'))
+        'codes': list(codes.values('id', 'title', 'code', 'language','created_at'))
     })
 
 @login_required
@@ -151,6 +152,7 @@ def save_code(request):
             code = data.get('code', '')
             language = data.get('language', '')
             title = data.get('title', '')
+            created_at = data.get('created_at','')
 
             # Ensure data is not empty
             if not code.strip():
@@ -162,6 +164,7 @@ def save_code(request):
                 code=code,
                 language=language,
                 title=title,
+                created_at=created_at
             )
 
             return JsonResponse({'message': 'Code saved successfully'}, status=201)
@@ -173,3 +176,22 @@ def save_code(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+@login_required
+def delete_code(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            code_id = data.get('id')
+            
+            # Get and delete the code snippet
+            code_snippet = CodeSnippet.objects.get(id=code_id)
+            code_snippet.delete()
+            
+            return JsonResponse({'status': 'success', 'message': 'Code deleted successfully'})
+        except CodeSnippet.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Code not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
