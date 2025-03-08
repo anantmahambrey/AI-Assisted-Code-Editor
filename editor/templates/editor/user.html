@@ -46,67 +46,105 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .saved-code {
-            padding: 1.5rem;
-            margin: 1rem 0;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease;
-        }
-
-        .saved-code:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .saved-code h4 {
-            color: #2563eb;
-            margin: 0 0 0.5rem 0;
-            font-size: 1.25rem;
-        }
-
-        .saved-code p {
-            color: #64748b;
-            margin: 0.5rem 0;
-            font-size: 0.95rem;
-        }
-
-        .saved-code pre {
-            background: #f8fafc;
-            padding: 1rem;
+        /* Container for each saved code item */
+            .saved-code {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ffffff;
             border-radius: 8px;
-            overflow-x: auto;
-            border: 1px solid #e2e8f0;
-            margin: 0.5rem 0;
-        }
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 4px solid #3b82f6;
+            }
 
-        #savedCodes {
-            overflow-y: auto;
-            max-height: 600px;
-            padding-right: 1rem;
-        }
+            .saved-code:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
 
-        #savedCodes::-webkit-scrollbar {
-            width: 8px;
-        }
+            /* Code title styling */
+            .saved-code h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 60%;
+            }
 
-        #savedCodes::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
+            /* Button container */
+            .saved-code-buttons {
+            display: flex;
+            gap: 10px;
+            }
 
-        #savedCodes::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
+            /* Base button styling */
+            .saved-code button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            }
 
-        #savedCodes::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
+            .saved-code button:hover {
+            transform: translateY(-1px);
+            }
+
+            .saved-code button:active {
+            transform: translateY(1px);
+            }
+
+            /* View button */
+            .saved-code button:not(.delete-btn) {
+            background-color: #3b82f6;
+            color: white;
+            }
+
+            .saved-code button:not(.delete-btn):hover {
+            background-color: #2563eb;
+            }
+
+            /* Delete button */
+            .saved-code .delete-btn {
+            background-color: #f1f5f9;
+            color: #64748b;
+            }
+
+            .saved-code .delete-btn:hover {
+            background-color: #fee2e2;
+            color: #ef4444;
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 640px) {
+            .saved-code {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            .saved-code h4 {
+                max-width: 100%;
+                margin-bottom: 8px;
+            }
+            
+            .saved-code-buttons {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            }
 
         .welcome-banner {
-            background: linear-gradient(135deg, #b9d2f9 0%, #6b99fb 100%);
+            background: linear-gradient(135deg, #85b2fc 0%, #0138af 100%);
             color: white;
             padding: 2rem;
             border-radius: 12px;
@@ -116,26 +154,25 @@
             grid-template-columns:1fr 10fr;
             place-items:right;
         }
-            .back-button {
-        display: inline-flex;
-        align-items: center;
-        padding: 8px 15px;
-        background-color: #4a90e2;
-        color: white;
-        text-decoration: none;
-        border-radius: 20px;
-        transition: all 0.3s ease;
-    }
+        .back-button {
+            display: flex;
+            align-items: center;
+            background-color: rgba(29, 26, 163, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background-color 0.2s, transform 0.1s;
+            }
 
-    .back-button:hover {
-        background-color: #3a7bc8;
-        transform: translateX(-3px);
-    }
+            .back-button:hover {
+            background-color: rgba(31, 0, 83, 0.3);
+            transform: translateX(-2px);
+            }
 
-    .back-icon {
-        margin-right: 5px;
-        font-size: 16px;
-    }
+            .back-button:active {
+            transform: translateX(-1px);
+            }
 
         .welcome-banner p {
             font-size: 1.5rem;
@@ -147,7 +184,142 @@
         }
         .welcome{
             text-align:center;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
+
+
+        .trigger {
+            width: 200px;
+            height: 50px;
+            background-color: blue;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin: 50px auto;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        /* Popup container styling */
+        .popup-content {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        padding: 25px;
+        max-width: 800px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        position: relative; /* Added to make close button positioning relative to this container */
+        }
+
+        /* Code title styling */
+        #ctitle {
+        font-size: 22px;
+        font-weight: 700;
+        color: #2d3748;
+        margin: 0 0 12px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #edf2f7;
+        padding-right: 30px; /* Added to make space for the close button */
+        }
+
+        /* Language indicator styling */
+        #clang {
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #4a5568;
+        background-color: #edf2f7;
+        padding: 4px 10px;
+        border-radius: 4px;
+        margin: 0 10px 15px 0;
+        }
+
+        /* Creation date styling */
+        #cron {
+        display: inline-block;
+        font-size: 14px;
+        color: #718096;
+        margin: 0 0 15px 0;
+        }
+
+        /* Code container styling */
+        pre {
+        background-color: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        }
+
+        /* Actual code styling */
+        #actcode {
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 14px;
+        color: #1a202c;
+        line-height: 1.5;
+        padding: 16px;
+        margin: 0;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        }
+
+        /* Optional: Add a top bar with syntax highlighting colors */
+        pre::before {
+        content: "";
+        display: block;
+        height: 8px;
+        background: linear-gradient(to right, #38b2ac, #4299e1, #667eea);
+        border-radius: 4px 4px 0 0;
+        }
+
+        /* Fixed close button styling */
+        .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 24px;
+        color: #a0aec0;
+        cursor: pointer;
+        transition: color 0.2s;
+        line-height: 1;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+        }
+
+        .close-btn:hover {
+        color: #4a5568;
+        }
+
+        /* Animation for popup appearance */
+        @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+        }
+
+        .popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        }
+
+        .popup-content {
+        animation: fadeIn 0.3s ease-out;
+        }
+
     </style>
 </head>
 <body>
@@ -160,8 +332,29 @@
     </div>
     <h3>Your Codes</h3>
     <div id="savedCodes"></div>
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <span class="close-btn" onclick="hidePopup()">&times;</span>
+            <p id="ctitle">code title</p>
+            <p id="clang">code language</p>
+            <p id="cron">created on</p>
+            <pre><p id="actcode">actual code</p></pre>
+        </div>
+    </div>
 
     <script>
+        function showPopup(message1,message2,message3,message4) {
+            document.getElementById("ctitle").innerHTML = message1;
+            document.getElementById("clang").innerHTML = "Language : " + message2;
+            document.getElementById("cron").innerHTML = "Created on : " + message3;
+            document.getElementById("actcode").innerHTML = atob(message4);
+            document.getElementById("popup").style.display = "flex";
+        }
+
+        function hidePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+
         function loadSavedCodes() {
             const csrftoken = getCookie('csrftoken');
             
@@ -184,10 +377,10 @@
                 savedCodesDiv.innerHTML = data.codes.map(code => `
                     <div class="saved-code">
                         <h4>${code.title}</h4>
-                        <p>Language: ${mapping[code.language] || code.language}</p>
-                        <p>Created on : ${code.created_at.substring(0, 10)}</p>
-                        <pre><p>${code.code}</p></pre>
-                        <button class="delete-btn" onclick="deleteCode(${code.id},'${code.title}')">Delete</button>
+                        <div class="saved-code-buttons">
+                            <button onclick="showPopup('${code.title}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}')">View</button>
+                            <button class="delete-btn" onclick="deleteCode(${code.id},'${code.title}')">Delete</button>
+                        </div>
                     </div>
                 `).join('');
             })
@@ -244,112 +437,3 @@
         document.addEventListener('DOMContentLoaded', loadSavedCodes);
     </script>
 </body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <!DOCTYPE html>
-<head>
-<style>
-    button {
-            padding: 12px 24px;
-            font-size: 1rem;
-            margin: 10px 0;
-            background: #4a90e2;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin-left:37px;
-        }
-
-        button:hover {
-            background: #357abd;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-    .saved-code {
-    padding: 10px;
-    margin: 10px 0;
-    background: white;
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.saved-code button {
-    padding: 5px 10px;
-    font-size: 14px;
-}
-
-#savedCodes {
-    overflow-y: auto;
-    max-height: 400px;
-}
-</style>
-</head>
-<body>
-    <p>Welcome {{username}}!</p>
-    <h3>Saved Codes</h3>
-    <div id="savedCodes"></div>
-
-    <script>
-        // Add this to your existing JavaScript
-function loadSavedCodes() {
-    const csrftoken = getCookie('csrftoken');
-    
-    fetch('/get-saved-codes/', {
-        headers: {
-            'X-CSRFToken': csrftoken,
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        const savedCodesDiv = document.getElementById('savedCodes');
-        savedCodesDiv.innerHTML = data.codes.map(code => `
-            <div class="saved-code">
-                <h4>${code.title}</h4>
-                <p>Language: ${code.language}</p>
-                <pre><p>Code: ${code.code}</p></pre>
-            </div>
-        `).join('');
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-
-    document.addEventListener('DOMContentLoaded', loadSavedCodes);
-    </script>
-</body> -->
