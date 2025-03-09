@@ -26,7 +26,9 @@ def index(request):
 
 @login_required
 def user(request):
-    return render(request, 'editor/user.html',{'username': request.user.username})
+    theme = request.GET.get('theme', 'light')
+    print(theme)
+    return render(request, 'editor/user.html',{'username': request.user.username, 'theme': theme})
 
 #On run code button
 @csrf_protect

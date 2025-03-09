@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -208,16 +209,16 @@
         }
 
         .user{
-            color:var(--text-color);
-            background-color: var(--border-color);
-            border:2px solid var(--border-color);
+            color:white;
+            background: linear-gradient(135deg, #85b2fc 0%, #0f4dd3 100%);
             margin:0;
-            border-radius:20px;
+            border-radius:5px;
             box-shadow: 0 1px 1px rgba(244, 238, 238, 0.05);
         }
         .user:hover{
             cursor:pointer;
-            background-color: var(--card-bg);
+            color:white;
+            background: linear-gradient(135deg, #85b2fc 0%, #7a9ae0 100%);
             box-shadow: 0 1px 1px rgba(222, 222, 222, 0.2);
         }
 
@@ -392,7 +393,7 @@
             <div class="heading">
                 <div class="temp">
                     <h2 class="header2">Code-Bender</h2>
-                    <a href="{% url 'user' %}"><button class="user">🙋🏻‍♂️<b><u>{{username}}</u></b></button></a>
+                    <a href="{% url 'user' %}?theme=" id="userLink"><button class="user">👤<b>{{username}}</b></button></a>
                 </div>
             <div>
                 <button class="theme-toggle" onclick="toggleTheme()">
@@ -507,7 +508,7 @@
 
         const codeTemplates = {
             'text/x-csrc': `#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}`,
-            'text/x-c++src': `#include <iostream>\n\nint main() {\n    std::cout << "Hello, World!" << std::endl;\n    return 0;\n}`,
+            'text/x-c++src': `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}`,
             'text/x-java': `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`,
             'javascript': `function main() {\n    console.log("Hello, World!");\n}\n\nmain();`,
             'python': `def main():\n    print("Hello, World!")\n\nif __name__ == "__main__":\n    main()`
@@ -647,6 +648,7 @@
             const moonPath = themeIcon.querySelector('.moon-icon');
             
             if (html.getAttribute('data-theme') === 'dark') {
+                document.getElementById("userLink").href = `{% url 'user' %}?theme=light`;
                 html.setAttribute('data-theme', 'light');
                 sunPath.style.display = 'none';
                 moonPath.style.display = 'block';
@@ -657,6 +659,7 @@
                     editor.setOption('theme', 'duotone-light');
                 }
             } else {
+                document.getElementById("userLink").href = `{% url 'user' %}?theme=dark`;
                 html.setAttribute('data-theme', 'dark');
                 sunPath.style.display = 'block';
                 moonPath.style.display = 'none';

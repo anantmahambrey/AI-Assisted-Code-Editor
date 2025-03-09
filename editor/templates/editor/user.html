@@ -1,13 +1,38 @@
 <!DOCTYPE html>
+<html data-theme="{{ theme }}">
 <head>
     <style>
+        :root {
+            /* Light theme variables */
+            --primary-color: #2563eb;
+            --secondary-color: #3b82f6;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --header-bg: white;
+            --card-bg: white;
+            --input-bg: white;
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme variables */
+            --primary-color: #60a5fa;
+            --secondary-color: #3b82f6;
+            --background-color: #1a1b1e;
+            --text-color: #e2e8f0;
+            --border-color: #333333;
+            --header-bg: #111111;
+            --card-bg: #2d2d2d;
+            --input-bg: #2d2d2d;
+        }
+
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
-            background-color: #f5f7fa;
-            color: #334155;
+            background-color: var(--background-color);
+            color: var(--text-color);
             line-height: 1.6;
         }
 
@@ -17,11 +42,11 @@
         }
 
         h3 {
-            color: #1e293b;
+            color: var(--text-color);
             font-size: 1.75rem;
             margin: 1.5rem 0;
             font-weight: 600;
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid var(--border-color);
             padding-bottom: 0.5rem;
         }
 
@@ -51,7 +76,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background-color: #ffffff;
+            background-color:var(--card-bg);
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             padding: 16px 20px;
@@ -70,7 +95,7 @@
             margin: 0;
             font-size: 16px;
             font-weight: 600;
-            color: #1e293b;
+            color: var(--text-color);
             flex-grow: 1;
             white-space: nowrap;
             overflow: hidden;
@@ -204,7 +229,7 @@
 
         /* Popup container styling */
         .popup-content {
-        background-color: #fff;
+        background-color: var(--card-bg);
         border-radius: 8px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         padding: 25px;
@@ -219,7 +244,7 @@
         #ctitle {
         font-size: 22px;
         font-weight: 700;
-        color: #2d3748;
+        color: var(--text-color);
         margin: 0 0 12px 0;
         padding-bottom: 10px;
         border-bottom: 2px solid #edf2f7;
@@ -248,7 +273,7 @@
 
         /* Code container styling */
         pre {
-        background-color: #f7fafc;
+        background-color: var(--background-color);
         border: 1px solid #e2e8f0;
         border-radius: 6px;
         padding: 0;
@@ -260,7 +285,7 @@
         #actcode {
         font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
         font-size: 14px;
-        color: #1a202c;
+        color: var(--text-color);
         line-height: 1.5;
         padding: 16px;
         margin: 0;
@@ -324,7 +349,7 @@
 </head>
 <body>
     <div class="welcome-banner">
-        <a href="{% url 'index' %}" class="back-button">
+        <a href="javascript:history.back()" id="backButton" class="back-button">
             <span class="back-icon">←</span>
             <span class="back-text">Back</span>
         </a>
@@ -343,6 +368,7 @@
     </div>
 
     <script>
+
         function showPopup(message1,message2,message3,message4) {
             document.getElementById("ctitle").innerHTML = message1;
             document.getElementById("clang").innerHTML = "Language : " + message2;
@@ -437,3 +463,4 @@
         document.addEventListener('DOMContentLoaded', loadSavedCodes);
     </script>
 </body>
+</html>
