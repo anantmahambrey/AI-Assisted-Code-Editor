@@ -12,6 +12,7 @@
             --header-bg: white;
             --card-bg: white;
             --input-bg: white;
+            --new-bg:white;
         }
 
         [data-theme="dark"] {
@@ -24,6 +25,7 @@
             --header-bg: #111111;
             --card-bg: #2d2d2d;
             --input-bg: #2d2d2d;
+            --new-bg: #3e3e3e;
         }
 
         body {
@@ -345,6 +347,16 @@
         animation: fadeIn 0.3s ease-out;
         }
 
+        #copybutton{
+            margin-left:16px;
+            font-size:0.8rem;
+            background-color:  var(--new-bg);
+        }
+
+        #copybutton:hover{
+            background-color: var(--border-color);
+        }
+
     </style>
 </head>
 <body>
@@ -359,21 +371,53 @@
     <div id="savedCodes"></div>
     <div class="popup" id="popup">
         <div class="popup-content">
+            <div id="popup2" style="
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--background-color);
+            color: var(--text-color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            font-size: 14px;
+            transition: opacity 0.5s ease-in-out;">
+            Code copied to clipboard!
+        </div>
             <span class="close-btn" onclick="hidePopup()">&times;</span>
             <p id="ctitle">code title</p>
             <p id="clang">code language</p>
             <p id="cron">created on</p>
-            <pre><p id="actcode">actual code</p></pre>
+            <button id="copybutton" title="Copy Code">📑</button>
+            <pre><code><p id="actcode">actual code</p></code></pre>
         </div>
     </div>
 
     <script>
 
+        document.getElementById("copybutton").addEventListener("click", function() {
+            const textToCopy = document.getElementById("actcode").innerText;        
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                // Show popup
+                const popup = document.getElementById("popup2");
+                popup.style.display = "block";
+                popup.style.opacity = "1";
+                // Hide popup after 3 seconds
+                setTimeout(() => {
+                    popup.style.opacity = "0";
+                    setTimeout(() => { popup.style.display = "none"; }, 500); // Extra delay to match fade-out
+                }, 2200);
+            }).catch(err => {
+                console.error("Failed to copy text: ", err);
+            });
+        });
+
         function showPopup(message1,message2,message3,message4) {
             document.getElementById("ctitle").innerHTML = message1;
             document.getElementById("clang").innerHTML = "Language : " + message2;
             document.getElementById("cron").innerHTML = "Created on : " + message3;
-            document.getElementById("actcode").innerHTML = atob(message4);
+            document.getElementById("actcode").innerText = atob(message4);
             document.getElementById("popup").style.display = "flex";
         }
 
