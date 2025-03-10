@@ -1,13 +1,9 @@
 # Code-Bender : AI-Assisted Online Code Editor
 
-## More Details 💡
-Check out our detailed Presentation : [Presentation](https://drive.google.com/file/d/1vtDEphdAHL-2LyE-nXCtpTuN6InXlGr5/view?usp=drive_link)
-
-Check out our demo video : [Demo Video](https://drive.google.com/file/d/1rACCbPIBPFf7KP9vWTNvUrIfvA2gGLJf/view?usp=drive_link)
-
 ## Overview ✨
-Code-Bender is a web-based code editor built with Django and CodeMirror that allows users to write, edit, and execute code in various programming languages. 
+Code-Bender is a web-based code editor built with Django and CodeMirror that allows users to write, edit, execute and save code in various programming languages. 
 It provides users with an easy-to-use interface to code in several languages, with AI Assistance.
+One Stop Platform for all coders to write code in different programming languages and to save their codes, all in a single online platform!
 
 ## Features ⚙️
 - **Multi-language Support**
@@ -37,6 +33,11 @@ It provides users with an easy-to-use interface to code in several languages, wi
   - Separate output display
   - Scrollable content
   - Clean and sleek UI
+ 
+- **User Profiles and database**
+  - Ability to Save Code
+  - One Stop platform to write and save all your codes
+  - Retreive code as and when desirable
 
 ## Tech Stack 🤖
 - Backend: Django
@@ -76,9 +77,11 @@ python manage.py runserver
 ### Code Editor
 1. Select your preferred programming language from the dropdown
 2. Choose a theme and mode and font-size if desired
-3. Write your code in the editor
-4. Click "Run Code" to execute
-5. View output below the editor
+3. Enter Code Title
+4. Write your code in the editor
+5. Click "Run Code" to execute
+6. View output below the editor
+7. Save your code for future reference
 
 ### Sidebar
 1. Click "Ask AI" to show/hide the sidebar
@@ -86,10 +89,12 @@ python manage.py runserver
 3. Click "Generate" to process the text
 4. View results in the scrollable output area
 
-### Future Scope
-1. User profiles and authentication
-2. Real time collaboration for users
-3. More AI Features
+### User profile
+1. Click Your Username on the top left corner to view your user profile
+2. Check all your previously saved codes
+3. Click on "view" to view the code
+4. Can read, copy and retreive the code as desired
+5. Click on "delete" to delete the code
 
 ## Acknowledgments 😀
 - CodeMirror for the text editor
