@@ -282,7 +282,7 @@
 
         /* Add smooth scrollbar for sidebar output */
     #sidebarOutput{
-        font-size:12px;
+        font-size: 13px;
     }
     #sidebarOutput::-webkit-scrollbar {
         width: 8px;
@@ -383,6 +383,17 @@
         display:grid;
         grid-template-rows:1fr 6fr;
     }
+    #copybutton{
+        font-size:10px;
+        width:45%;
+        margin-bottom: 20px;
+    }
+    .copydiv{
+        display:grid;
+        place-items:center;
+        margin-top:0;
+        position:relative;
+    }
     </style>
 </head>
 <body>
@@ -475,7 +486,23 @@
                 <textarea id="sidebarTextarea" placeholder="What would you like help with?"></textarea>
                 <button class="subBut" onclick="submitSidebarText()">Generate ✨</button>
                 </div>
-                <pre><div id="sidebarOutput"></div></pre>
+                <pre><code><div id="sidebarOutput"></div></code></pre>
+                <div class="copydiv"><button id="copybutton" title="Copy Code">Copy Output</button>
+                    <div id="popup2" style="
+                    position: absolute;
+                    bottom: 20px;
+                    left: 95%;
+                    transform: translateX(-50%);
+                    background: var(--background-color);
+                    color: var(--text-color);
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    display: none;
+                    font-size: 14px;
+                    transition: opacity 0.5s ease-in-out;">
+                    Copied!
+                </div>
+                </div>
             </div>
         </div>
     </div>
@@ -491,6 +518,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/clike/clike.min.js"></script>
 
     <script>
+        document.getElementById("copybutton").addEventListener("click", function() {
+            const textToCopy = document.getElementById("sidebarOutput").innerText;        
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                // Show popup
+                const popup = document.getElementById("popup2");
+                popup.style.display = "block";
+                popup.style.opacity = "1";
+                // Hide popup after 3 seconds
+                setTimeout(() => {
+                    popup.style.opacity = "0";
+                    setTimeout(() => { popup.style.display = "none"; }, 500); // Extra delay to match fade-out
+                }, 1000);
+            }).catch(err => {
+                console.error("Failed to copy text: ", err);
+            });
+        });
+
         var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
             lineNumbers: true,
             mode: "javascript",
@@ -592,7 +636,15 @@
                 return response.json();
             })
             .then(data => {
-                document.getElementById('sidebarOutput').textContent = data.output;
+                if(purpose=="a"){
+                    var textData=data.output;
+                    const match = textData.match(/```(?:\w+)?\n([\s\S]*?)\n```/);
+                    const result = match ? match[1] : "";
+                    document.getElementById('sidebarOutput').textContent = result;
+                }
+                else{
+                    document.getElementById('sidebarOutput').textContent = data.output;
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
