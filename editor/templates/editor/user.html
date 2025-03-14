@@ -253,6 +253,16 @@
         padding-right: 30px; /* Added to make space for the close button */
         }
 
+        #ctitle2{
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-color);
+            margin: 33px 0 0 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #537da7;
+            padding-right: 30px; /* Added to make space for the close button */
+        }
+
         /* Language indicator styling */
         #clang {
         display: inline-block;
@@ -294,6 +304,18 @@
         overflow-x: auto;
         white-space: pre-wrap;
         word-wrap: break-word;
+        }
+
+        #desc{
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-size: 15px;
+            color: var(--text-color);
+            line-height: 1.5;
+            padding: 8px;
+            margin: 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
         /* Optional: Add a top bar with syntax highlighting colors */
@@ -400,6 +422,8 @@
             <p id="cron">created on</p>
             <button id="copybutton" title="Copy Code">📑</button>
             <pre><code><p id="actcode">actual code</p></code></pre>
+            <p id="ctitle2"></p>
+            <p id="desc"></p>
         </div>
     </div>
 
@@ -422,11 +446,13 @@
             });
         });
 
-        function showPopup(message1,message2,message3,message4) {
+        function showPopup(message1,message2,message3,message4,message5) {
             document.getElementById("ctitle").innerHTML = message1;
             document.getElementById("clang").innerHTML = "Language : " + message2;
             document.getElementById("cron").innerHTML = "Created on : " + message3;
             document.getElementById("actcode").innerText = atob(message4);
+            document.getElementById("ctitle2").innerText = "Description: ";
+            document.getElementById("desc").innerText = message5;
             document.getElementById("popup").style.display = "flex";
         }
 
@@ -458,7 +484,7 @@
                         <h4>${code.title}</h4>
                         <p class="langg">Language : ${mapping[code.language]}</p>
                         <div class="saved-code-buttons">
-                            <button onclick="showPopup('${code.title}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}')">View</button>
+                            <button onclick="showPopup('${code.title}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${code.desc}')">View</button>
                             <button class="delete-btn" onclick="deleteCode(${code.id},'${code.title}')">Delete</button>
                         </div>
                     </div>

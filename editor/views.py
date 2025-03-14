@@ -142,7 +142,7 @@ def process_sidebar(request):
 def get_saved_codes(request):
     codes = CodeSnippet.objects.filter(user=request.user)
     return JsonResponse({
-        'codes': list(codes.values('id', 'title', 'code', 'language','created_at'))
+        'codes': list(codes.values('id', 'title', 'code', 'language','created_at','desc'))
     })
 
 @login_required
@@ -155,6 +155,7 @@ def save_code(request):
             language = data.get('language', '')
             title = data.get('title', '')
             created_at = data.get('created_at','')
+            desc = data.get('desc','')
 
             # Ensure data is not empty
             if not code.strip():
@@ -165,6 +166,7 @@ def save_code(request):
                 user=request.user,
                 code=code,
                 language=language,
+                desc=desc,
                 title=title,
                 created_at=created_at
             )

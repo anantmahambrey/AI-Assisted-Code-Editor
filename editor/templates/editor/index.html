@@ -196,6 +196,7 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             min-height: 100px;
             margin:25px;
+            font-size:14px;
         }
         .theme-toggle{
             background-color: var(--background-color);
@@ -394,6 +395,56 @@
         margin-top:0;
         position:relative;
     }
+    .popup {
+        display: none; /* Initially hidden */
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 50%;
+        height: 50%;
+        background-color: var(--background-color);
+        border-color: 2px solid var(--text-color);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        transform: translate(-50%, -50%);
+        border-radius:20px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+        }
+
+        .popup-content {
+        animation: fadeIn 0.3s ease-out;
+        }
+        .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 24px;
+        color: #a0aec0;
+        cursor: pointer;
+        transition: color 0.2s;
+        line-height: 1;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+        }
+
+        .close-btn:hover {
+        color: #4a5568;
+        }
+        #ctitle {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-color);
+        margin: 0 0 12px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #edf2f7;
+        padding-right: 30px; /* Added to make space for the close button */
+        }
     </style>
 </head>
 <body>
@@ -465,7 +516,7 @@
             <div>
                 <button onclick="getCode()">Run Code</button>
                 <!-- <div> -->
-                <button onclick="saveCode()">Save Code</button>
+                <button onclick="showPopup()">Save Code</button>
                 <!-- </div> -->
             </div>
             
@@ -506,6 +557,14 @@
             </div>
         </div>
     </div>
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <span class="close-btn" onclick="hidePopup()">&times;</span>
+            <p id="ctitle">Code Description</p>
+            <textarea id="descTA" placeholder="Enter Code Description if any" style="width: 300px; height: 150px; resize: none;"></textarea>
+            <button onclick="saveCode()">Save Code</button>
+        </div>
+    </div>
     <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}
         <button type="submit" class="logout">Logout</button>
@@ -518,6 +577,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/clike/clike.min.js"></script>
 
     <script>
+        function hidePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+
+        function showPopup() {
+            // document.getElementById("ctitle").innerHTML = message1;
+            document.getElementById("popup").style.display = "flex";
+        }
+
         document.getElementById("copybutton").addEventListener("click", function() {
             const textToCopy = document.getElementById("sidebarOutput").innerText;        
             navigator.clipboard.writeText(textToCopy).then(() => {
@@ -734,6 +802,7 @@
             const code = editor.getValue();
             const title = document.getElementById('codeTitle').value.trim();
             const language = document.getElementById('modeDropdown').value;
+            const desc = document.getElementById("descTA").value;
             
             // Check if both code and title are provided
             if (!code || !title) {
@@ -753,6 +822,7 @@
                     code: code,
                     title: title,
                     language: language,
+                    desc:desc,
                 })
             })
             .then(response => {
@@ -767,6 +837,8 @@
                 console.error('Error:', error);
                 alert("An error occurred while saving the code.");
             });
+
+            document.getElementById("popup").style.display = "none";
         }
     </script>
 
