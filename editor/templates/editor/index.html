@@ -401,7 +401,7 @@
         top: 50%;
         left: 50%;
         width: 50%;
-        height: 50%;
+        height: 60%;
         background-color: var(--background-color);
         border-color: 2px solid var(--text-color);
         justify-content: center;
@@ -444,6 +444,11 @@
         padding-bottom: 10px;
         border-bottom: 2px solid #edf2f7;
         padding-right: 30px; /* Added to make space for the close button */
+        text-align:left;
+        }
+        .savebut{
+            margin-left:0;
+            background-color: #0a2662;
         }
     </style>
 </head>
@@ -561,8 +566,8 @@
         <div class="popup-content">
             <span class="close-btn" onclick="hidePopup()">&times;</span>
             <p id="ctitle">Code Description</p>
-            <textarea id="descTA" placeholder="Enter Code Description if any" style="width: 300px; height: 150px; resize: none;"></textarea>
-            <button onclick="saveCode()">Save Code</button>
+            <textarea id="descTA" placeholder="Enter Code Description if any" style="width: 500px; height: 150px; resize: none; display:block"></textarea>
+            <button  class="savebut" onclick="saveCode()">Save</button>
         </div>
     </div>
     <form method="post" action="{% url 'logout' %}">
@@ -583,7 +588,17 @@
 
         function showPopup() {
             // document.getElementById("ctitle").innerHTML = message1;
-            document.getElementById("popup").style.display = "flex";
+            const code = editor.getValue();
+            const title = document.getElementById('codeTitle').value.trim();
+            
+            // Check if both code and title are provided
+            if (!code || !title) {
+                alert("Please enter both code and title before saving.");
+                return; // Exit the function early
+            }
+            else{
+                document.getElementById("popup").style.display = "flex";
+            }
         }
 
         document.getElementById("copybutton").addEventListener("click", function() {

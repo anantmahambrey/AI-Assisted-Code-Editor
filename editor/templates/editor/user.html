@@ -451,10 +451,18 @@
             document.getElementById("clang").innerHTML = "Language : " + message2;
             document.getElementById("cron").innerHTML = "Created on : " + message3;
             document.getElementById("actcode").innerText = atob(message4);
-            document.getElementById("ctitle2").innerText = "Description: ";
-            document.getElementById("desc").innerText = message5;
+            if (!message5 || message5 === null || message5.trim() === "" || message5 === "null") {
+                document.getElementById("ctitle2").style.display="none";
+                document.getElementById("desc").style.display="none";
+            } else {
+                document.getElementById("ctitle2").style.display="flex";
+                document.getElementById("desc").style.display="flex";
+                document.getElementById("ctitle2").innerText = "Description: ";
+                document.getElementById("desc").innerText = message5;
+            }
             document.getElementById("popup").style.display = "flex";
         }
+        
 
         function hidePopup() {
             document.getElementById("popup").style.display = "none";
