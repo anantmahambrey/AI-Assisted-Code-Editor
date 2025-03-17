@@ -146,6 +146,20 @@ def get_saved_codes(request):
     })
 
 @login_required
+def search_view(request):
+    query = request.GET.get('query', '')  # Get the search query
+    if not query:
+        results = CodeSnippet.objects.filter(user=request.user).values(
+            'id', 'title', 'code', 'language', 'created_at', 'desc'
+        )
+    else:
+        # Fetch matching results
+        results = CodeSnippet.objects.filter(user=request.user, title__icontains=query).values(
+            'id', 'title', 'code', 'language','created_at','desc'  # Add more fields if needed
+        )
+    return JsonResponse({'codes': list(results)})
+
+@login_required
 def save_code(request):
     if request.method == 'POST':
         try:

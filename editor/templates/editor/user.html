@@ -388,6 +388,32 @@
             font-size:14px;
             text-align:right;
         }
+        #searchip {
+            width: 100%;
+            max-width: 500px;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid var(--border-color);  /* Green border */
+            border-radius: 19px;
+            outline: none;
+            transition: all 0.3s ease-in-out;
+            background-color: var(--background-color);
+            margin-bottom:20px;
+            color:var(--text-color);
+        }
+
+        #searchip::placeholder {
+            color: rgb(154, 154, 154);
+            font-style: italic;
+        }
+
+        #searchip:focus {
+            border:1px;
+            border-color: var(--primary-color); /* Darker green */
+            box-shadow: 0px 0px 7px var(--primary-color);
+            background-color: var(--background-color);
+        }
+
     </style>
 </head>
 <body>
@@ -399,6 +425,9 @@
         <p class="welcome">Welcome {{username}}!</p>
     </div>
     <h3>Your Codes</h3>
+
+    <input id="searchip" type="text" name="query" placeholder="Search by title....." oninput="loadSearchedCodes()">
+
     <div id="savedCodes"></div>
     <div class="popup" id="popup">
         <div class="popup-content">
@@ -500,6 +529,42 @@
             })
             .catch(error => console.error('Error:', error));
         }
+
+
+        function loadSearchedCodes() {
+            const query = document.getElementById('searchip').value.trim();
+            const csrftoken = getCookie('csrftoken');
+            fetch(`/search/?query=${encodeURIComponent(query)}`, {
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const mapping = {
+                'text/x-java': 'Java',
+                'python': 'Python',
+                'text/x-csrc': 'C',
+                'text/x-c++src': 'C++',
+                'javascript': 'JavaScript'
+                };
+                const savedCodesDiv = document.getElementById('savedCodes');
+                savedCodesDiv.innerHTML = data.codes.map(code => `
+                    <div class="saved-code">
+                        <h4>${code.title}</h4>
+                        <p class="langg">Language : ${mapping[code.language]}</p>
+                        <div class="saved-code-buttons">
+                            <button onclick="showPopup('${code.title}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${code.desc}')">View</button>
+                            <button class="delete-btn" onclick="deleteCode(${code.id},'${code.title}')">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
 
         function getCookie(name) {
             let cookieValue = null;

@@ -13,4 +13,5 @@ urlpatterns = [
     path('user/', views.user, name='user'),
     path('get-saved-codes/', views.get_saved_codes, name='get_saved_codes'),
     path('delete-code/', views.delete_code, name='delete_code'),
+    path('search/', views.search_view, name='search'),
 ]
