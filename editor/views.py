@@ -226,6 +226,23 @@ def delete_code(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
 
+@login_required
+def delete_code_shared(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            code_id = data.get('id')
+            code_snippet = SharedCodeSnippet.objects.get(id=code_id)
+            code_snippet.delete()
+            
+            return JsonResponse({'status': 'success', 'message': 'Code deleted successfully'})
+        except CodeSnippet.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Code not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+
 @csrf_protect
 @login_required
 def shared_code(request):

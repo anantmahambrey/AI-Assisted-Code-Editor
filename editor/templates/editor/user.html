@@ -742,7 +742,6 @@
 
         //function for deleting one of your codes.
         function deleteCode(codeId,codeTitle) {
-            // Confirm deletion with the user
             if (confirm(`Are you sure you want to delete "${codeTitle}"?`)) {
                 const csrftoken = getCookie('csrftoken');
                 
@@ -758,9 +757,38 @@
                 })
                 .then(response => {
                     if (response.ok) {
-                        // Remove the deleted code div from the DOM
                         alert("Code deleted successfully!");
                         location.reload();
+                    } else {
+                        alert("Error deleting code. Please try again.");
+                    }
+                    return response.json();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while deleting the code.");
+                });
+            }
+        }
+
+        //function for deleting one of your shared codes.
+        function deleteCodeShared(codeId,codeTitle) {
+            if (confirm(`Are you sure you want to delete "${codeTitle}"?`)) {
+                const csrftoken = getCookie('csrftoken');
+                fetch('/delete-code-shared/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        id:codeId
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Code deleted successfully!");
+                        loadSharedCodes();
                     } else {
                         alert("Error deleting code. Please try again.");
                     }
@@ -799,7 +827,7 @@
                         <p class="langg">Language : ${code.language}</p>
                         <div class="saved-code-buttons">
                             <button onclick="showPopup2('${code.title}','${code.language}','${code.created_at.substring(0, 10)}','${code.code}','${code.desc}','${code.user_shared}')">View</button>
-                            <button class="delete-btn" onclick="deleteCode(${code.id},'${code.title}')">Delete</button>
+                            <button class="delete-btn" onclick="deleteCodeShared(${code.id},'${code.title}')">Delete</button>
                         </div>
                     </div>
                 `).join('');
