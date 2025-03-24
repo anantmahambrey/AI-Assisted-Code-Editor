@@ -13,6 +13,7 @@
             --card-bg: white;
             --input-bg: white;
             --new-bg:white;
+            --sbcolor:rgb(53, 164, 189);
         }
 
         [data-theme="dark"] {
@@ -26,6 +27,7 @@
             --card-bg: #2d2d2d;
             --input-bg: #2d2d2d;
             --new-bg: #3e3e3e;
+            --sbcolor:rgb(32, 115, 140);
         }
 
         body {
@@ -253,6 +255,17 @@
         padding-right: 30px; /* Added to make space for the close button */
         }
 
+        #sharedby {
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #333b4a;
+        background-color: #b5d3f1;
+        padding: 4px 10px;
+        border-radius: 4px;
+        margin: 0 10px 15px 12px;
+        }
+
         #ctitle2{
             font-size: 18px;
             font-weight: 600;
@@ -323,7 +336,7 @@
         content: "";
         display: block;
         height: 8px;
-        background: linear-gradient(to right, #38b2ac, #4299e1, #667eea);
+        background: var(--custom-gradient,linear-gradient(to right, #38b2ac, #4299e1, #667eea));
         border-radius: 4px 4px 0 0;
         }
 
@@ -365,6 +378,21 @@
         z-index: 1000;
         }
 
+        .popupuser {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 300px; /* Adjust width */
+            height: 160px; /* Adjust height */
+            background-color: var(--background-color);
+            transform: translate(-50%, -50%); /* Centering */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Optional shadow */
+            border-radius: 10px; /* Optional rounded corners */
+            padding: 20px; /* Optional padding */
+            z-index: 1000;
+        }
+
         .popup-content {
         animation: fadeIn 0.3s ease-out;
         }
@@ -390,7 +418,7 @@
         }
         #searchip {
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             padding: 10px 15px;
             font-size: 16px;
             border: 2px solid var(--border-color);  /* Green border */
@@ -414,6 +442,72 @@
             background-color: var(--background-color);
         }
 
+        .innerdiv {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .innerdiv p {
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        #usernamepopup {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        #usernamepopup:focus {
+            border-color: #007bff; /* Highlights the input field on focus */
+        }
+
+        #shareCodeBtn {
+            width: 60%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left:0;
+        }
+
+        #shareCodeBtn:hover {
+            background-color: #375e87;
+        }
+
+        #scb{
+            background-color: var(--sbcolor);
+        }
+
+        #scb:hover{
+            background-color: rgb(28, 95, 122);
+        }
+
+        .code-link {
+            color: var(--text-color);
+            text-decoration: underline;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+        .code-link:hover {
+            color: var(--border-color);
+        }
+
     </style>
 </head>
 <body>
@@ -424,7 +518,7 @@
         </a>
         <p class="welcome">Welcome {{username}}!</p>
     </div>
-    <h3>Your Codes</h3>
+    <h3><span onclick="loadSavedCodes()" class="code-link">Your Codes</span> | <span onclick="loadSharedCodes()" class="code-link">Shared Codes</span></h3>
 
     <input id="searchip" type="text" name="query" placeholder="Search by title....." oninput="loadSearchedCodes()">
 
@@ -449,6 +543,7 @@
             <p id="ctitle">code title</p>
             <p id="clang">code language</p>
             <p id="cron">created on</p>
+            <p id="sharedby"></p>
             <button id="copybutton" title="Copy Code">📑</button>
             <pre><code><p id="actcode">actual code</p></code></pre>
             <p id="ctitle2"></p>
@@ -456,8 +551,16 @@
         </div>
     </div>
 
-    <script>
+    <div class="popupuser" id="popupuser">
+        <div class="innerdiv">
+        <p style="display:block; font-size:22px; margin-bottom: 18px;">Share To :</p>
+        <input id="usernamepopup" type="text" name="queryusername" placeholder="Enter username.....">
+        <button id="shareCodeBtn">Share Code</button>
+        </div>
+        <span class="close-btn" onclick="hidePopupuser()">&times;</span>
+    </div>
 
+    <script>
         document.getElementById("copybutton").addEventListener("click", function() {
             const textToCopy = document.getElementById("actcode").innerText;        
             navigator.clipboard.writeText(textToCopy).then(() => {
@@ -475,11 +578,14 @@
             });
         });
 
+
+        //showing the popup after clicking view for your codes.
         function showPopup(message1,message2,message3,message4,message5) {
             document.getElementById("ctitle").innerHTML = message1;
             document.getElementById("clang").innerHTML = "Language : " + message2;
             document.getElementById("cron").innerHTML = "Created on : " + message3;
             document.getElementById("actcode").innerText = atob(message4);
+            document.getElementById("sharedby").style.display="none";
             if (!message5 || message5 === null || message5.trim() === "" || message5 === "null") {
                 document.getElementById("ctitle2").style.display="none";
                 document.getElementById("desc").style.display="none";
@@ -492,14 +598,65 @@
             document.getElementById("popup").style.display = "flex";
         }
         
-
+        //hiding the popup
         function hidePopup() {
             document.getElementById("popup").style.display = "none";
+            document.getElementById("ctitle2").style.borderBottom = "border-bottom: 2px solid #537da7;";
+            document.documentElement.style.setProperty("--custom-gradient", "linear-gradient(to right, #38b2ac, #4299e1, #667eea)");
         }
 
+        //showing the enter username popup after clicking share code
+        function showUserpopup(message1, message2, message3, message4, message5) {
+            document.getElementById("popupuser").style.display = "flex";
+            let shareButton = document.getElementById("shareCodeBtn");
+            shareButton.replaceWith(shareButton.cloneNode(true)); 
+            shareButton = document.getElementById("shareCodeBtn");
+            shareButton.addEventListener("click", function () {
+                let user_to_share = document.getElementById("usernamepopup").value;
+                if (!user_to_share) {
+                    alert("Please enter a username.");
+                    return;
+                }
+                const csrftoken = getCookie('csrftoken');
+                fetch('/shared-code/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        user_to_share: user_to_share,
+                        code: message4,
+                        title: message1,
+                        language: message2,
+                        desc: message5
+                    })
+                })
+                .then(response => response.json().then(data => ({ status: response.status, body: data })))
+                .then(({ status, body }) => {
+                    if (status === 201) {
+                        alert("Code Shared Successfully!");
+                    } else {
+                        alert("Error: " + body.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while sharing the code.");
+                });
+
+                document.getElementById("popupuser").style.display = "none";
+            });
+        }
+
+        //hiding the enter username popup
+        function hidePopupuser() {
+            document.getElementById("popupuser").style.display = "none";
+        }
+
+        //function for loading all saved codes in the recatungualar title divs
         function loadSavedCodes() {
             const csrftoken = getCookie('csrftoken');
-            
             fetch('/get-saved-codes/', {
                 headers: {
                     'X-CSRFToken': csrftoken,
@@ -522,6 +679,7 @@
                         <p class="langg">Language : ${mapping[code.language]}</p>
                         <div class="saved-code-buttons">
                             <button onclick="showPopup('${code.title}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${code.desc}')">View</button>
+                            <button onclick="showUserpopup('${code.title}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${code.desc}')" id="scb">Share</button>
                             <button class="delete-btn" onclick="deleteCode(${code.id},'${code.title}')">Delete</button>
                         </div>
                     </div>
@@ -530,7 +688,7 @@
             .catch(error => console.error('Error:', error));
         }
 
-
+        //function for loading searched codes as we type them in search bar.
         function loadSearchedCodes() {
             const query = document.getElementById('searchip').value.trim();
             const csrftoken = getCookie('csrftoken');
@@ -557,6 +715,7 @@
                         <p class="langg">Language : ${mapping[code.language]}</p>
                         <div class="saved-code-buttons">
                             <button onclick="showPopup('${code.title}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${code.desc}')">View</button>
+                            <button onclick="showUserpopup('${code.title}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${code.desc}')" id="scb">Share</button>
                             <button class="delete-btn" onclick="deleteCode(${code.id},'${code.title}')">Delete</button>
                         </div>
                     </div>
@@ -581,6 +740,7 @@
             return cookieValue;
         }
 
+        //function for deleting one of your codes.
         function deleteCode(codeId,codeTitle) {
             // Confirm deletion with the user
             if (confirm(`Are you sure you want to delete "${codeTitle}"?`)) {
@@ -611,6 +771,69 @@
                     alert("An error occurred while deleting the code.");
                 });
             }
+        }
+
+
+        //function for loading all your shared codes.
+        function loadSharedCodes() {
+            const csrftoken = getCookie('csrftoken');
+            fetch('/get-shared-codes/', {
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const mapping = {
+                'text/x-java': 'Java',
+                'python': 'Python',
+                'text/x-csrc': 'C',
+                'text/x-c++src': 'C++',
+                'javascript': 'JavaScript'
+                };
+                const savedCodesDiv = document.getElementById('savedCodes');
+                savedCodesDiv.innerHTML = data.codes.map(code => `
+                    <div class="saved-code"  style="border-left:4px solid #ffdde1;">
+                        <h4>${code.title}</h4>
+                        <p class="langg">Language : ${code.language}</p>
+                        <div class="saved-code-buttons">
+                            <button onclick="showPopup2('${code.title}','${code.language}','${code.created_at.substring(0, 10)}','${code.code}','${code.desc}','${code.user_shared}')">View</button>
+                            <button class="delete-btn" onclick="deleteCode(${code.id},'${code.title}')">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+
+        //function for displaying a shared code once you click on view
+        function showPopup2(message1,message2,message3,message4,message5,message6) {
+            document.getElementById("ctitle").innerHTML = message1;
+            document.getElementById("clang").innerHTML = "Language : " + message2;
+            document.getElementById("cron").innerHTML = "Created on : " + message3;
+            document.getElementById("actcode").innerText = atob(message4);
+            document.getElementById("sharedby").innerText = "Shared by : " + message6;
+            document.getElementById("sharedby").style.backgroundColor = "#ffdde1";
+            if (!message6 || message6 === null || message6.trim() === "" || message6 === "null") {
+                document.getElementById("sharedby").style.display="none";
+            }
+            else{
+                document.getElementById("sharedby").style.display="inline";
+            }
+            if (!message5 || message5 === null || message5.trim() === "" || message5 === "null") {
+                document.getElementById("ctitle2").style.display="none";
+                document.getElementById("desc").style.display="none";
+            } else {
+                document.getElementById("ctitle2").style.display="flex";
+                document.getElementById("desc").style.display="flex";
+                document.getElementById("ctitle2").innerText = "Description: ";
+                document.getElementById("ctitle2").style.borderBottom = "2px solid #ff9a9e";
+                document.getElementById("desc").innerText = message5;
+            }
+            document.documentElement.style.setProperty("--custom-gradient", "linear-gradient(to right, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1)");
+            document.getElementById("popup").style.display = "flex";
         }
 
         document.addEventListener('DOMContentLoaded', loadSavedCodes);

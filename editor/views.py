@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from .models import CodeSnippet
+from django.contrib.auth.models import User
+from .models import SharedCodeSnippet
 
 def register(request):
     if request.method == 'POST':
@@ -145,6 +147,15 @@ def get_saved_codes(request):
         'codes': list(codes.values('id', 'title', 'code', 'language','created_at','desc'))
     })
 
+
+@login_required
+def get_shared_codes(request):
+    codes = SharedCodeSnippet.objects.filter(user=request.user)
+    return JsonResponse({
+        'codes': list(codes.values('id', 'title', 'code', 'language','created_at','desc','user_shared'))
+    })
+
+
 @login_required
 def search_view(request):
     query = request.GET.get('query', '')  # Get the search query
@@ -213,3 +224,41 @@ def delete_code(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+
+@csrf_protect
+@login_required
+def shared_code(request):
+    if request.method == 'POST':
+        try:
+            # Parse incoming data
+            data = json.loads(request.body)
+            code = data.get('code', '')
+            language = data.get('language', '')
+            title = data.get('title', '')
+            desc = data.get('desc', '')
+            user_to_share = data.get('user_to_share', '')
+
+            try:
+                user_object = User.objects.get(username=user_to_share)
+            except User.DoesNotExist:
+                return JsonResponse({'error': 'Entered user does not exist'}, status=400)
+
+            SharedCodeSnippet.objects.create(
+                user=user_object,
+                user_shared=request.user.username,
+                code=code,
+                language=language,
+                desc=desc,
+                title=title
+            )
+
+            return JsonResponse({'message': 'Code shared successfully'}, status=201)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
