@@ -17,4 +17,5 @@ urlpatterns = [
     path('delete-code/', views.delete_code, name='delete_code'),
     path('delete-code-shared/', views.delete_code_shared, name='delete_code_shared'),
     path('search/', views.search_view, name='search'),
+    path('search2/', views.search_view2, name='search2'),
 ]

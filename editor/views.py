@@ -170,6 +170,27 @@ def search_view(request):
         )
     return JsonResponse({'codes': list(results)})
 
+
+@login_required
+def search_view2(request):
+    query = request.GET.get('query', '')  # Get the search query
+    if not query:
+        results = SharedCodeSnippet.objects.filter(user=request.user).values(
+            'id', 'title', 'code', 'language', 'created_at', 'desc', 'user_shared'
+        )
+    else:
+        # Fetch matching results
+        results = SharedCodeSnippet.objects.filter(
+            user=request.user,
+            title__icontains=query
+        ).values(
+            'id', 'title', 'code', 'language', 'created_at', 'desc', 'user_shared'
+        )
+    return JsonResponse({'codes': list(results)})
+
+
+
+
 @login_required
 def save_code(request):
     if request.method == 'POST':
