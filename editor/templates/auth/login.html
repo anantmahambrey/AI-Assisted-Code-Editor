@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
+  {% load static %}
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       height: 100vh;
       margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: url("{% static 'images/bg.webp' %}") no-repeat center center fixed;
+      background-size: cover;
     }
-    
+
+    /* Overlay to reduce transparency */
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* 80% transparency */
+      backdrop-filter: blur(5px);
+      z-index: -1;
+    }
+
     form {
-      background: white;
+      background: rgb(233, 233, 233);
       padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
@@ -30,10 +44,11 @@
     
     input {
       padding: 0.8rem;
-      border: 1px solid #e1e1e1;
+      border: 1px solid #bebebe;
       border-radius: 5px;
       font-size: 1rem;
       transition: border-color 0.3s ease;
+      background-color: rgb(233, 233, 233);
     }
     
     input:focus {
@@ -74,33 +89,39 @@
     }
 
     .header2 {
-            color: rgb(46, 46, 106);
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            font-weight: 600;
-        }
+      /* color: rgb(46, 46, 106); */
+      color:rgb(219, 219, 219);
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-weight: 600;
+    }
 
-        .divi{
-          display:grid;
-          grid-template-rows:1fr 3fr;
-          place-items:center;
-        }
+    .divi {
+      display: grid;
+      grid-template-rows: 1fr 3fr;
+      place-items: center;
+      position: relative;
+      z-index: 1;
+    }
   </style>
 </head>
 <body>
+  <!-- Background Overlay -->
+  <div class="overlay"></div>
+  
   <!-- Login Form -->
-   <div class="divi">
-  <p class="header2"><b>Code-Bender</b></p>
-  <form method="post">
-    {% csrf_token %}
-    <div class="form-group">
-      <input type="text" name="username" placeholder="Username">
-      <input type="password" name="password" placeholder="Password">
-      <button type="submit">Login</button>
-    </div>
-    <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
-  </form>
-</div>
+  <div class="divi">
+    <p class="header2"><b>Code-Bender</b></p>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="text" name="username" placeholder="Username">
+        <input type="password" name="password" placeholder="Password">
+        <button type="submit">Login</button>
+      </div>
+      <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+    </form>
+  </div>
 </body>
 </html>

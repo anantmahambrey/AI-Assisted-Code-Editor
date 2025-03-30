@@ -508,6 +508,10 @@
         .code-link:hover {
             color: #868585;
         }
+        #vb{
+            background-color: #feced4;
+            color:grey;
+        }
 
     </style>
 </head>
@@ -562,6 +566,17 @@
     </div>
 
     <script>
+        function escapeJsString(str) {
+            if (!str) return '';
+            return str
+                .replace(/\\/g, '\\\\')
+                .replace(/'/g, "\\'")
+                .replace(/"/g, '\\"')
+                .replace(/\n/g, '\\n')
+                .replace(/\r/g, '\\r')
+                .replace(/\t/g, '\\t');
+        }
+
         document.getElementById("copybutton").addEventListener("click", function() {
             const textToCopy = document.getElementById("actcode").innerText;        
             navigator.clipboard.writeText(textToCopy).then(() => {
@@ -594,7 +609,7 @@
                 document.getElementById("ctitle2").style.display="flex";
                 document.getElementById("desc").style.display="flex";
                 document.getElementById("ctitle2").innerText = "Description: ";
-                document.getElementById("desc").innerText = message5;
+                document.getElementById("desc").innerHTML = message5;
             }
             document.getElementById("popup").style.display = "flex";
         }
@@ -677,17 +692,23 @@
                 'javascript': 'JavaScript'
                 };
                 const savedCodesDiv = document.getElementById('savedCodes');
-                savedCodesDiv.innerHTML = data.codes.map(code => `
+                savedCodesDiv.innerHTML = data.codes.map(code => {
+                // Escape special characters in title and description
+                const safeTitle = escapeJsString(code.title);
+                const safeDesc = escapeJsString(code.desc);
+                
+                return `
                     <div class="saved-code">
                         <h4>${code.title}</h4>
                         <p class="langg">Language : ${mapping[code.language]}</p>
                         <div class="saved-code-buttons">
-                            <button onclick="showPopup('${code.title}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${code.desc}')">View</button>
-                            <button onclick="showUserpopup('${code.title}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${code.desc}')" id="scb">Share</button>
-                            <button class="delete-btn" onclick="deleteCode(${code.id},'${code.title}')">Delete</button>
+                            <button onclick="showPopup('${safeTitle}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${safeDesc}')">View</button>
+                            <button onclick="showUserpopup('${safeTitle}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${safeDesc}')" id="scb">Share</button>
+                            <button class="delete-btn" onclick="deleteCode(${code.id},'${safeTitle}')">Delete</button>
                         </div>
                     </div>
-                `).join('');
+                `;
+            }).join('');
             })
             .catch(error => console.error('Error:', error));
         }
@@ -713,17 +734,23 @@
                 'javascript': 'JavaScript'
                 };
                 const savedCodesDiv = document.getElementById('savedCodes');
-                savedCodesDiv.innerHTML = data.codes.map(code => `
+                savedCodesDiv.innerHTML = data.codes.map(code => {
+                // Escape special characters in title and description
+                const safeTitle = escapeJsString(code.title);
+                const safeDesc = escapeJsString(code.desc);
+                
+                return `
                     <div class="saved-code">
                         <h4>${code.title}</h4>
                         <p class="langg">Language : ${mapping[code.language]}</p>
                         <div class="saved-code-buttons">
-                            <button onclick="showPopup('${code.title}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${code.desc}')">View</button>
-                            <button onclick="showUserpopup('${code.title}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${code.desc}')" id="scb">Share</button>
-                            <button class="delete-btn" onclick="deleteCode(${code.id},'${code.title}')">Delete</button>
+                            <button onclick="showPopup('${safeTitle}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${safeDesc}')">View</button>
+                            <button onclick="showUserpopup('${safeTitle}','${mapping[code.language]}','${code.created_at.substring(0, 10)}','${btoa(code.code)}','${safeDesc}')" id="scb">Share</button>
+                            <button class="delete-btn" onclick="deleteCode(${code.id},'${safeTitle}')">Delete</button>
                         </div>
                     </div>
-                `).join('');
+                `;
+            }).join('');
             })
             .catch(error => console.error('Error:', error));
         }
@@ -750,16 +777,22 @@
                 'javascript': 'JavaScript'
                 };
                 const savedCodesDiv = document.getElementById('savedCodes');
-                savedCodesDiv.innerHTML = data.codes.map(code => `
-                    <div class="saved-code"  style="border-left:4px solid #ffdde1;">
+                savedCodesDiv.innerHTML = data.codes.map(code => {
+                // Escape special characters in title and description
+                const safeTitle = escapeJsString(code.title);
+                const safeDesc = escapeJsString(code.desc);
+                
+                return `
+                    <div class="saved-code" style="border-left:4px solid #ffdde1;">
                         <h4>${code.title}</h4>
                         <p class="langg">Language : ${code.language}</p>
                         <div class="saved-code-buttons">
-                            <button onclick="showPopup2('${code.title}','${code.language}','${code.created_at.substring(0, 10)}','${code.code}','${code.desc}','${code.user_shared}')">View</button>
-                            <button class="delete-btn" onclick="deleteCodeShared(${code.id},'${code.title}')">Delete</button>
+                            <button onclick="showPopup2('${safeTitle}','${code.language}','${code.created_at.substring(0, 10)}','${code.code}','${safeDesc}','${code.user_shared}')">View</button>
+                            <button class="delete-btn" onclick="deleteCodeShared(${code.id},'${safeTitle}')">Delete</button>
                         </div>
                     </div>
-                `).join('');
+                `;
+            }).join('');
             })
             .catch(error => console.error('Error:', error));
         }
@@ -864,16 +897,22 @@
                 'javascript': 'JavaScript'
                 };
                 const savedCodesDiv = document.getElementById('savedCodes');
-                savedCodesDiv.innerHTML = data.codes.map(code => `
-                    <div class="saved-code"  style="border-left:4px solid #ffdde1;">
+                savedCodesDiv.innerHTML = data.codes.map(code => {
+                // Escape special characters in title, description, and user_shared
+                const safeTitle = escapeJsString(code.title);
+                const safeDesc = escapeJsString(code.desc);
+                
+                return `
+                    <div class="saved-code" style="border-left:4px solid #ffdde1;">
                         <h4>${code.title}</h4>
                         <p class="langg">Language : ${code.language}</p>
                         <div class="saved-code-buttons">
-                            <button onclick="showPopup2('${code.title}','${code.language}','${code.created_at.substring(0, 10)}','${code.code}','${code.desc}','${code.user_shared}')">View</button>
-                            <button class="delete-btn" onclick="deleteCodeShared(${code.id},'${code.title}')">Delete</button>
+                            <button id="vb" onclick="showPopup2('${safeTitle}','${code.language}','${code.created_at.substring(0, 10)}','${code.code}','${safeDesc}','${code.user_shared}')">View</button>
+                            <button class="delete-btn" onclick="deleteCodeShared(${code.id},'${safeTitle}')">Delete</button>
                         </div>
                     </div>
-                `).join('');
+                `;
+            }).join('');
             })
             .catch(error => console.error('Error:', error));
         }
@@ -901,7 +940,7 @@
                 document.getElementById("desc").style.display="flex";
                 document.getElementById("ctitle2").innerText = "Description: ";
                 document.getElementById("ctitle2").style.borderBottom = "2px solid #ff9a9e";
-                document.getElementById("desc").innerText = message5;
+                document.getElementById("desc").innerHTML = message5;
             }
             document.documentElement.style.setProperty("--custom-gradient", "linear-gradient(to right, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1)");
             document.getElementById("popup").style.display = "flex";
