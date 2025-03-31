@@ -450,6 +450,24 @@
             margin-left:0;
             background-color: #0a2662;
         }
+
+        #loader {
+            border: 4px solid var(--text-color); /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 10px;
+            margin-top:3px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
     </style>
 </head>
 <body>
@@ -520,6 +538,7 @@
 
             <div>
                 <button onclick="getCode()">Run Code</button>
+                <div id="loader" style="display: none;"></div>
                 <!-- <div> -->
                 <button onclick="showPopup()">Save Code</button>
                 <!-- </div> -->
@@ -736,43 +755,50 @@
         }
 
         function getCode() {
-            const code = editor.getValue();
-            const inps = document.getElementById("inputs").value;
-            var language = document.getElementById("modeDropdown").value;
-            const csrftoken = getCookie('csrftoken');
-            
-            fetch('/run-code/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken
-                },
-                body: JSON.stringify({
-                    code: code,
-                    language: language,
-                    inputs: inps
-                })
+        const code = editor.getValue();
+        const inps = document.getElementById("inputs").value;
+        var language = document.getElementById("modeDropdown").value;
+        const csrftoken = getCookie('csrftoken');
+        
+        // Show the loader
+        document.getElementById('loader').style.display = 'inline-block';
+        
+        fetch('/run-code/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({
+                code: code,
+                language: language,
+                inputs: inps
             })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(data => {
-                        throw new Error(data.error || 'Network response was not ok');
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                let output = data.output || '';
-                if (data.errors) {
-                    output += '\nErrors:\n' + data.errors;
-                }
-                document.getElementById('output').textContent = output;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('output').textContent = 'Error: ' + error.message;
-            });
-        }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'Network response was not ok');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            let output = data.output || '';
+            if (data.errors) {
+                output += '\nErrors:\n' + data.errors;
+            }
+            document.getElementById('output').textContent = output;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('output').textContent = 'Error: ' + error.message;
+        })
+        .finally(() => {
+            // Hide the loader once the response is received
+            document.getElementById('loader').style.display = 'none';
+        });
+    }
 
 
         function toggleTheme() {
