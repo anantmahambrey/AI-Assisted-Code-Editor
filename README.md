@@ -124,3 +124,24 @@ python manage.py runserver
 - Contributors and testers
 
 ##### Let's get coding!✔️
+
+Login Page 
+![Login Page](images/code_bender.png)
+
+Code Editor
+![main editor](images/code_editor.png)
+
+User Profile
+![Save Codes Page](images/save_codes.png)
+
+User Saved Codes
+![Saved Code](images/saved_code.png)
+
+Share Codes with Peers
+![Share button](images/share_button.png)
+
+View Shared codes by peers
+![Share Codes](images/share_codes.png)
+
+Shared Code
+![Shared Code](images/shared_code.png)
