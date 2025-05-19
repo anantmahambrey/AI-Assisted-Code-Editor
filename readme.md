@@ -126,3 +126,9 @@ python manage.py runserver
 ##### Let's get coding!✔️
 
 ![Login Page](images/code_bender.png)
+![main editor](images/code_editor.png)
+![Save Codes Page](images/save_codes.png)
+![Saved Code](images/saved_code.png)
+![Share button](images/share_button.png)
+![Share Codes](images/share_codes.png)
+![Shared Code](images/shared_code.png)
