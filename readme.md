@@ -124,3 +124,5 @@ python manage.py runserver
 - Contributors and testers
 
 ##### Let's get coding!✔️
+
+![Login Page](images/code_bender.png)
