@@ -57,7 +57,7 @@ def run_code(request):
             }
             
             headers = {
-                "x-rapidapi-key": "3a123a404cmshf5483e521d7da6fp14ce7bjsnb90b0f6ca183",
+                "x-rapidapi-key": "YOUR_API_KEY",
                 "x-rapidapi-host": "code-compiler.p.rapidapi.com",
                 "Content-Type": "application/x-www-form-urlencoded"
             }
@@ -105,7 +105,7 @@ def process_sidebar(request):
             purpose = data.get('purpose', '')
             
             #sending to Gemini
-            genai.configure(api_key="AIzaSyDxiigaZNe4TTzdDojZOoQfOC-PjnTLiw4")
+            genai.configure(api_key="YOUR_API_KEY")
             generation_config = {
                 "temperature": 1,
                 "top_p": 0.95,
